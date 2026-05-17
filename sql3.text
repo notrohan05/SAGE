@@ -1,0 +1,286 @@
+CREATE DATABASE Bank;
+USE Bank;
+
+CREATE TABLE Branch(
+    branch_name VARCHAR(50) PRIMARY KEY,
+    branch_city VARCHAR(50) NOT NULL,
+    asset DECIMAL(12,2) NOT NULL
+);
+
+CREATE TABLE Account(
+    acc_no INT PRIMARY KEY,
+    branch_name VARCHAR(50),
+    balance DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY(branch_name) REFERENCES Branch(branch_name)
+);
+
+CREATE TABLE Customer(
+    cust_name VARCHAR(50) PRIMARY KEY,
+    cust_street VARCHAR(100) NOT NULL,
+    cust_city VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Depositor(
+    cust_name VARCHAR(50),
+    acc_no INT,
+    PRIMARY KEY(cust_name, acc_no),
+    FOREIGN KEY(cust_name) REFERENCES Customer(cust_name),
+    FOREIGN KEY(acc_no) REFERENCES Account(acc_no)
+);
+
+CREATE TABLE Loan(
+    loan_no INT PRIMARY KEY,
+    branch_name VARCHAR(50),
+    amount DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY(branch_name) REFERENCES Branch(branch_name)
+);
+
+CREATE TABLE Borrower(
+    cust_name VARCHAR(50),
+    loan_no INT,
+    PRIMARY KEY(cust_name, loan_no),
+    FOREIGN KEY(cust_name) REFERENCES Customer(cust_name),
+    FOREIGN KEY(loan_no) REFERENCES Loan(loan_no)
+);
+
+INSERT INTO Branch VALUES
+('Wadia College','Pune',500000),
+('Shivaji Nagar','Mumbai',700000),
+('FC Road','Pune',400000);
+
+INSERT INTO Account VALUES
+(101,'Wadia College',25000),
+(102,'FC Road',18000),
+(103,'Shivaji Nagar',30000);
+
+INSERT INTO Customer VALUES
+('Vinay','JM Road','Pune'),
+('Rahul','Camp','Pune'),
+('Sneha','MG Road','Mumbai');
+
+INSERT INTO Depositor VALUES
+('Vinay',101),
+('Rahul',102),
+('Sneha',103);
+
+INSERT INTO Loan VALUES
+(201,'Wadia College',15000),
+(202,'FC Road',10000),
+(203,'Wadia College',20000);
+
+INSERT INTO Borrower VALUES
+('Vinay',201),
+('Rahul',202),
+('Sneha',203);
+
+SELECT branch_name, AVG(balance) AS avg_balance
+FROM Account
+GROUP BY branch_name
+HAVING AVG(balance) > 15000;
+
+SELECT COUNT(*) AS total_customers
+FROM Customer;
+
+SELECT SUM(amount) AS total_loan_amount
+FROM Loan;
+
+DELETE FROM Loan
+WHERE amount BETWEEN 1300 AND 1500;
+
+SELECT branch_name, AVG(balance) AS avg_balance
+FROM Account
+GROUP BY branch_name;
+
+SELECT cust_name, cust_city
+FROM Customer
+WHERE cust_name LIKE 'P%';
+
+Aim
+
+To create and implement a Bank Database using SQL and perform aggregate functions, grouping, filtering, deletion, and pattern matching operations.
+
+Objective
+To create a banking database with multiple related tables.
+To establish relationships using Primary Key and Foreign Key constraints.
+To insert records into the tables.
+To perform SQL operations using:
+AVG()
+COUNT()
+SUM()
+GROUP BY
+HAVING
+DELETE
+LIKE operator
+To retrieve meaningful information from the database.
+
+Theory
+
+A Database Management System (DBMS) is used to organize and manage data efficiently. SQL (Structured Query Language) is used for database creation, data insertion, and querying.
+
+In this experiment, a banking database named Bank is created with tables such as:
+
+Branch → Stores branch details.
+Account → Stores account information.
+Customer → Stores customer details.
+Depositor → Links customers with accounts.
+Loan → Stores loan details.
+Borrower → Links customers with loans.
+
+Important SQL concepts used:
+
+AVG() → Finds average values.
+COUNT() → Counts total records.
+SUM() → Calculates total values.
+GROUP BY → Groups records based on common values.
+HAVING → Filters grouped records.
+DELETE → Removes records from table.
+LIKE → Searches patterns in text data.
+
+Algorithm
+Start.
+Create database Bank.
+Select the database using USE Bank.
+Create all required tables:
+Branch
+Account
+Customer
+Depositor
+Loan
+Borrower
+Define Primary Keys and Foreign Keys.
+Insert sample records into all tables.
+Execute SQL queries:
+Find average account balance branch-wise using AVG() and GROUP BY.
+Display branches having average balance greater than 15000 using HAVING.
+Count total customers using COUNT().
+Find total loan amount using SUM().
+Delete loan records where amount is between 1300 and 1500.
+Display average balance of each branch.
+Display customer names starting with specific character using LIKE.
+Display the output.
+Stop.
+
+Conclusion
+Thus, the Bank database was successfully created and various SQL operations such as aggregate functions, grouping, filtering, deletion, and pattern matching were implemented successfully. The experiment helped in understanding data retrieval and manipulation techniques in DBMS using SQL.
+
+
+1. What is DBMS?
+DBMS (Database Management System) is software used to store, organize, and manage data efficiently.
+
+2. What is SQL?
+SQL (Structured Query Language) is used to create and manipulate databases.
+
+3. What is the purpose of CREATE DATABASE?
+It is used to create a new database.
+Example:
+CREATE DATABASE Bank;
+
+4. What is a Primary Key?
+A Primary Key uniquely identifies each record in a table.
+
+5. What is a Foreign Key?
+A Foreign Key creates a relationship between two tables.
+
+6. Which table stores branch details?
+The Branch table stores branch details.
+
+7. Which table stores account details?
+The Account table stores account details.
+
+8. What is the purpose of the Customer table?
+It stores customer information such as name, street, and city.
+
+9. What is the purpose of GROUP BY clause?
+GROUP BY groups rows having the same values.
+Example:
+GROUP BY branch_name;
+
+10. What is the purpose of HAVING clause?
+HAVING is used to filter grouped data after GROUP BY.
+Example:
+HAVING AVG(balance) > 15000;
+
+11. What is the difference between WHERE and HAVING?
+WHERE	HAVING
+Filters rows	Filters grouped data
+Used before GROUP BY	Used after GROUP BY
+
+12. What does AVG() function do?
+AVG() calculates the average value of a column.
+Example:
+SELECT AVG(balance) FROM Account;
+
+13. What does COUNT() function do?
+COUNT() returns the total number of records.
+Example:
+SELECT COUNT(*) FROM Customer;
+
+14. What does SUM() function do?
+SUM() calculates the total sum of numeric values.
+Example:
+SELECT SUM(amount) FROM Loan;
+
+15. What is the purpose of DELETE command?
+DELETE removes records from a table.
+Example:
+DELETE FROM Loan
+WHERE amount BETWEEN 1300 AND 1500;
+
+16. What is the use of BETWEEN operator?
+
+BETWEEN checks values within a given range.
+
+17. What is the purpose of LIKE operator?
+LIKE is used for pattern matching.
+Example:
+WHERE cust_name LIKE 'P%';
+
+18. What does 'P%' mean in LIKE operator?
+It means names starting with the letter P.
+
+19. What is the use of aliases like avg_balance?
+Aliases give temporary names to output columns.
+
+20. What is aggregate function?
+Aggregate functions perform calculations on multiple rows.
+Examples:
+AVG()
+COUNT()
+SUM()
+MAX()
+MIN()
+
+21. What is referential integrity?
+It ensures valid relationships between related tables.
+
+22. What happens if duplicate Primary Key is inserted?
+The database gives an error because Primary Key values must be unique.
+
+23. Can Foreign Key contain NULL values?
+Yes, unless NOT NULL constraint is applied.
+
+24. What is normalization?
+Normalization reduces data redundancy and improves database structure.
+
+25. What is the purpose of NOT NULL constraint?
+It prevents NULL values in a column.
+
+26. What is the data type DECIMAL(12,2)?
+It stores decimal values with 12 total digits and 2 digits after decimal point.
+
+27. Which SQL command is used to insert records?
+INSERT INTO command is used.
+
+28. Which query displays average balance branch-wise?
+SELECT branch_name, AVG(balance)
+FROM Account
+GROUP BY branch_name;
+
+29. Which query counts total customers?
+SELECT COUNT(*) AS total_customers
+FROM Customer;
+
+30. Which query finds customer names starting with 'P'?
+SELECT cust_name, cust_city
+FROM Customer
+WHERE cust_name LIKE 'P%';
