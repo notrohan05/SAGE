@@ -1,0 +1,286 @@
+CREATE DATABASE Bank;
+USE Bank;
+
+CREATE TABLE Branch(
+    branch_name VARCHAR(50) PRIMARY KEY,
+    branch_city VARCHAR(50) NOT NULL,
+    asset DECIMAL(12,2) NOT NULL
+);
+
+CREATE TABLE Account(
+    acc_no INT PRIMARY KEY,
+    branch_name VARCHAR(50),
+    balance DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY(branch_name) REFERENCES Branch(branch_name)
+);
+
+CREATE TABLE Customer(
+    cust_name VARCHAR(50) PRIMARY KEY,
+    cust_street VARCHAR(100) NOT NULL,
+    cust_city VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Depositor(
+    cust_name VARCHAR(50),
+    acc_no INT,
+    PRIMARY KEY(cust_name, acc_no),
+    FOREIGN KEY(cust_name) REFERENCES Customer(cust_name),
+    FOREIGN KEY(acc_no) REFERENCES Account(acc_no)
+);
+
+CREATE TABLE Loan(
+    loan_no INT PRIMARY KEY,
+    branch_name VARCHAR(50),
+    amount DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY(branch_name) REFERENCES Branch(branch_name)
+);
+
+CREATE TABLE Borrower(
+    cust_name VARCHAR(50),
+    loan_no INT,
+    PRIMARY KEY(cust_name, loan_no),
+    FOREIGN KEY(cust_name) REFERENCES Customer(cust_name),
+    FOREIGN KEY(loan_no) REFERENCES Loan(loan_no)
+);
+
+INSERT INTO Branch VALUES
+('Wadia College','Pune',500000),
+('Shivaji Nagar','Mumbai',700000),
+('FC Road','Pune',400000);
+
+INSERT INTO Account VALUES
+(101,'Wadia College',25000),
+(102,'FC Road',18000),
+(103,'Shivaji Nagar',30000);
+
+INSERT INTO Customer VALUES
+('Vinay','JM Road','Pune'),
+('Rahul','Camp','Pune'),
+('Sneha','MG Road','Mumbai');
+
+INSERT INTO Depositor VALUES
+('Vinay',101),
+('Rahul',102),
+('Sneha',103);
+
+INSERT INTO Loan VALUES
+(201,'Wadia College',15000),
+(202,'FC Road',10000),
+(203,'Wadia College',20000);
+
+INSERT INTO Borrower VALUES
+('Vinay',201),
+('Rahul',202),
+('Sneha',203);
+
+SELECT DISTINCT D.cust_name
+FROM Depositor D
+JOIN Borrower B
+ON D.cust_name = B.cust_name;
+
+SELECT cust_name FROM Depositor
+UNION
+SELECT cust_name FROM Borrower;
+
+SELECT cust_name
+FROM Depositor
+WHERE cust_name NOT IN (
+    SELECT cust_name FROM Borrower
+);
+
+SELECT AVG(balance) AS avg_balance
+FROM Account
+WHERE branch_name = 'Wadia College';
+
+SELECT A.branch_name, COUNT(DISTINCT D.cust_name) AS num_depositors
+FROM Account A
+JOIN Depositor D
+ON A.acc_no = D.acc_no
+GROUP BY A.branch_name;
+
+
+Aim
+To create and implement a Bank Database using SQL and perform different SQL operations such as JOIN, UNION, subqueries, aggregate functions, and GROUP BY clause.
+
+Objective
+To create tables using SQL commands.
+To establish relationships between tables using Primary Key and Foreign Key.
+To insert records into the database tables.
+To perform SQL queries using:
+JOIN
+UNION
+Subqueries
+Aggregate functions
+GROUP BY clause
+To retrieve meaningful information from the database.
+
+Theory
+
+Database Management System (DBMS) is used to store and manage data efficiently. SQL (Structured Query Language) is used to create databases, tables, and perform operations on stored data.
+
+In this experiment, a banking database named Bank is created with the following tables:
+
+Branch → Stores branch details.
+Account → Stores account information.
+Customer → Stores customer details.
+Depositor → Connects customers and accounts.
+Loan → Stores loan details.
+Borrower → Connects customers and loans.
+
+Concepts used in this program:
+
+Primary Key → Uniquely identifies records.
+Foreign Key → Maintains relationship between tables.
+JOIN → Combines data from multiple tables.
+UNION → Combines results from multiple SELECT queries.
+Subquery → Query inside another query.
+Aggregate Function → Performs calculations like AVG and COUNT.
+GROUP BY → Groups rows having same values.
+
+Algorithm
+Start.
+Create database Bank.
+Select the database using USE Bank.
+Create all required tables:
+Branch
+Account
+Customer
+Depositor
+Loan
+Borrower
+Define Primary Keys and Foreign Keys.
+Insert sample records into all tables.
+Execute SQL queries:
+Find customers who are both depositors and borrowers using JOIN.
+Display all customer names using UNION.
+Find customers who are depositors but not borrowers using subquery.
+Calculate average balance of accounts in Wadia College branch.
+Count number of depositors branch-wise using GROUP BY.
+Display the output.
+Stop.
+
+Conclusion
+Thus, the Bank database was successfully created and different SQL operations such as JOIN, UNION, subqueries, aggregate functions, and GROUP BY clause were implemented successfully. The experiment helped in understanding table relationships and data retrieval techniques in DBMS.
+
+1. What is DBMS?
+DBMS (Database Management System) is software used to store, organize, and manage data efficiently.
+
+2. What is SQL?
+SQL (Structured Query Language) is used to create and manipulate databases.
+
+3. What is the purpose of CREATE DATABASE?
+It is used to create a new database.
+Example:
+CREATE DATABASE Bank;
+
+4. Why do we use USE Bank?
+It selects the database on which operations will be performed.
+
+5. What is a Primary Key?
+A Primary Key uniquely identifies each record in a table.
+Example:
+branch_name VARCHAR(50) PRIMARY KEY
+
+6. What is a Foreign Key?
+A Foreign Key creates a relationship between two tables.
+Example:
+FOREIGN KEY(branch_name) REFERENCES Branch(branch_name)
+
+7. Which table stores customer details?
+The Customer table stores customer details.
+
+8. Which table stores account information?
+The Account table stores account information.
+
+9. What is the purpose of the Depositor table?
+The Depositor table links customers with their accounts.
+
+10. What is the purpose of the Borrower table?
+The Borrower table links customers with their loans.
+
+11. What is JOIN in SQL?
+JOIN is used to combine records from multiple tables based on related columns.
+
+12. Which JOIN is used in this program?
+INNER JOIN is used.
+Example:
+FROM Depositor D
+JOIN Borrower B
+ON D.cust_name = B.cust_name;
+
+13. What is the purpose of DISTINCT keyword?
+It removes duplicate values from the result.
+
+14. What is UNION in SQL?
+UNION combines results of two SELECT queries and removes duplicates.
+Example:
+SELECT cust_name FROM Depositor
+UNION
+SELECT cust_name FROM Borrower;
+
+15. What is a subquery?
+A subquery is a query written inside another query.
+Example:
+SELECT cust_name FROM Borrower
+
+16. What does NOT IN do?
+It checks values that are not present in another query result.
+
+17. What is an aggregate function?
+Aggregate functions perform calculations on multiple rows.
+Examples:
+AVG()
+COUNT()
+SUM()
+MAX()
+MIN()
+
+18. What is the use of AVG() function?
+AVG() calculates the average value.
+Example:
+SELECT AVG(balance) FROM Account;
+
+19. What is GROUP BY used for?
+GROUP BY groups rows having the same values into summary rows.
+Example:
+GROUP BY A.branch_name;
+
+20. What does COUNT() function do?
+COUNT() counts the number of records.
+
+21. Why is COUNT(DISTINCT D.cust_name) used?
+It counts unique customers only and avoids duplicates.
+
+22. What is the purpose of DECIMAL(10,2)?
+It stores decimal numbers with 10 digits total and 2 digits after decimal point.
+
+23. What happens if duplicate Primary Key is inserted?
+The database gives an error because Primary Key values must be unique.
+
+24. Can Foreign Key contain duplicate values?
+Yes, Foreign Key values can repeat.
+
+25. What is referential integrity?
+It ensures that relationships between tables remain valid.
+
+26. What is normalization?
+Normalization is the process of reducing data redundancy.
+
+27. What is the difference between WHERE and HAVING?
+WHERE	HAVING
+Filters rows	Filters groups
+Used before GROUP BY	Used after GROUP BY
+
+28. Which command inserts records into a table?
+INSERT INTO command.
+Example:
+INSERT INTO Customer VALUES ('Vinay','JM Road','Pune');
+
+29. What is the purpose of aliases like D and B?
+Aliases provide short names to tables for easier query writing.
+
+30. Which query finds customers who are both depositors and borrowers?
+SELECT DISTINCT D.cust_name
+FROM Depositor D
+JOIN Borrower B
+ON D.cust_name = B.cust_name;
