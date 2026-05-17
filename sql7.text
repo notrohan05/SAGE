@@ -1,0 +1,262 @@
+CREATE DATABASE Customers;
+USE Customers;
+
+CREATE TABLE CUSTOMERS(
+    CNo INT PRIMARY KEY,
+    Cname VARCHAR(50) NOT NULL,
+    Ccity VARCHAR(50) NOT NULL,
+    CMobile VARCHAR(15)
+);
+
+CREATE TABLE ITEMS(
+    INo INT PRIMARY KEY,
+    Iname VARCHAR(50) NOT NULL,
+    Itype VARCHAR(30),
+    Iprice DECIMAL(10,2),
+    Icount INT
+);
+
+CREATE TABLE PURCHASE(
+    PNo INT PRIMARY KEY,
+    Pdate DATE,
+    Pquantity INT,
+    Cno INT,
+    INo INT,
+    FOREIGN KEY(Cno) REFERENCES CUSTOMERS(CNo),
+    FOREIGN KEY(INo) REFERENCES ITEMS(INo)
+);
+
+INSERT INTO CUSTOMERS VALUES
+(1, 'Gopal', 'Pune', '9876543210'),
+(2, 'Maya', 'Mumbai', '9123456780'),
+(3, 'Ravi', 'Delhi', '9988776655'),
+(4, 'Sneha', 'Pune', '9090909090'),
+(5, 'Aman', 'Mumbai', '8888888888');
+
+INSERT INTO ITEMS VALUES
+(101, 'Pen', 'Stationary', 50, 100),
+(102, 'Notebook', 'Stationary', 800, 50),
+(103, 'Bag', 'Accessories', 1200, 30),
+(104, 'Calculator', 'Stationary', 950, 20),
+(105, 'Marker', 'Stationary', 450, 70);
+
+INSERT INTO PURCHASE VALUES
+(201, '2026-05-10', 2, 2, 102),
+(202, '2026-05-11', 1, 2, 104),
+(203, '2026-05-12', 5, 1, 101),
+(204, '2026-05-13', 3, 3, 105),
+(205, '2026-05-14', 1, 4, 102);
+
+SELECT * FROM ITEMS
+WHERE Iprice BETWEEN 400 AND 1000;
+
+UPDATE CUSTOMERS
+SET CMobile = '9876543210'
+WHERE Cname = 'Gopal';
+
+SELECT * FROM ITEMS
+WHERE Iprice = (SELECT MAX(Iprice) FROM ITEMS);
+
+SELECT * FROM PURCHASE
+ORDER BY Pdate DESC;
+
+SELECT Ccity, COUNT(*) AS total_customers
+FROM CUSTOMERS
+GROUP BY Ccity;
+
+SELECT C.Cname, P.Pquantity
+FROM CUSTOMERS C
+JOIN PURCHASE P
+ON C.CNo = P.Cno
+WHERE C.Cname = 'Maya';
+
+CREATE VIEW StationaryView AS
+SELECT Iname, Iprice, Icount
+FROM ITEMS
+WHERE Itype = 'Stationary';
+
+SELECT * FROM StationaryView;
+
+
+Aim
+
+To create and implement a Customer Purchase Database using SQL and perform operations such as filtering, updating, grouping, joining tables, subqueries, ordering records, and creating views.
+
+Objective
+To create tables for customers, items, and purchases.
+To establish relationships using Primary Key and Foreign Key constraints.
+To insert records into tables.
+To perform SQL operations using:
+BETWEEN
+UPDATE
+Subquery
+ORDER BY
+GROUP BY
+JOIN
+VIEW
+To retrieve meaningful information from the database.
+
+Theory
+
+A Database Management System (DBMS) is used to store, organize, and manage data efficiently. SQL (Structured Query Language) is used to create databases, tables, and manipulate stored data.
+
+In this experiment, a database named Customers is created with the following tables:
+
+CUSTOMERS → Stores customer details.
+ITEMS → Stores item details such as item type, price, and quantity.
+PURCHASE → Stores purchase information and connects customers with items.
+
+Important SQL concepts used:
+
+PRIMARY KEY → Uniquely identifies records.
+FOREIGN KEY → Maintains relationships between tables.
+BETWEEN → Selects values within a range.
+UPDATE → Modifies existing records.
+Subquery → Query inside another query.
+ORDER BY → Sorts records.
+GROUP BY → Groups records with similar values.
+JOIN → Combines data from multiple tables.
+VIEW → Creates a virtual table based on a query.
+
+Algorithm
+Start.
+Create database Customers.
+Select the database using USE Customers.
+Create tables:
+CUSTOMERS
+ITEMS
+PURCHASE
+Define Primary Key and Foreign Key constraints.
+Insert sample records into all tables.
+Execute SQL queries:
+Display items whose price is between 400 and 1000.
+Update customer mobile number.
+Display item having maximum price using subquery.
+Display purchase details in descending order of purchase date.
+Count total customers city-wise using GROUP BY.
+Display purchase quantity of customer named Maya using JOIN.
+Create a VIEW named StationaryView.
+Display records from the created VIEW.
+Display the output.
+Stop.
+
+Conclusion
+
+Thus, the Customer Purchase Database was successfully created and various SQL operations such as filtering, updating, grouping, joining tables, ordering records, subqueries, and view creation were performed successfully. The experiment helped in understanding database relationships and data manipulation techniques using SQL.
+
+
+1. What is DBMS?
+DBMS (Database Management System) is software used to store, organize, and manage data efficiently.
+
+2. What is SQL?
+SQL (Structured Query Language) is used to create and manipulate databases.
+
+3. What is the purpose of CREATE DATABASE?
+It is used to create a new database.
+Example:
+CREATE DATABASE Customers;
+
+4. What is a Primary Key?
+A Primary Key uniquely identifies each record in a table.
+Example:
+CNo INT PRIMARY KEY
+
+5. What is a Foreign Key?
+A Foreign Key creates a relationship between two tables.
+Example:
+FOREIGN KEY(Cno) REFERENCES CUSTOMERS(CNo)
+
+6. Which table stores customer details?
+The CUSTOMERS table stores customer details.
+
+7. Which table stores item details?
+The ITEMS table stores item information.
+
+8. Which table stores purchase details?
+The PURCHASE table stores purchase records.
+
+9. What is the purpose of BETWEEN operator?
+BETWEEN selects values within a specific range.
+Example:
+WHERE Iprice BETWEEN 400 AND 1000;
+
+10. What is UPDATE statement used for?
+UPDATE modifies existing records in a table.
+Example:
+UPDATE CUSTOMERS
+SET CMobile = '9876543210'
+
+11. What is a subquery?
+A subquery is a query written inside another query.
+Example:
+SELECT MAX(Iprice) FROM ITEMS
+
+12. What does MAX() function do?
+MAX() returns the maximum value from a column.
+
+13. What is ORDER BY clause?
+ORDER BY sorts records in ascending or descending order.
+Example:
+ORDER BY Pdate DESC;
+
+14. What does DESC mean?
+DESC means descending order.
+
+15. What is GROUP BY clause?
+GROUP BY groups rows having the same values.
+Example:
+GROUP BY Ccity;
+
+16. What does COUNT(*) do?
+COUNT(*) returns the total number of records.
+
+17. What is JOIN in SQL?
+JOIN combines data from multiple related tables.
+
+18. Which JOIN is used in this program?
+INNER JOIN is used.
+Example:
+JOIN PURCHASE P
+ON C.CNo = P.Cno
+
+19. What is VIEW in SQL?
+VIEW is a virtual table created from a query.
+
+20. Which VIEW is created in this program?
+StationaryView is created.
+Example:
+CREATE VIEW StationaryView AS
+
+21. What is the advantage of VIEW?
+VIEW simplifies complex queries and improves security.
+
+22. What is the purpose of aliases like C and P?
+Aliases provide short names to tables for easier query writing.
+
+23. What is referential integrity?
+It ensures proper relationship between related tables.
+
+24. What happens if duplicate Primary Key is inserted?
+The database gives an error because Primary Key values must be unique.
+
+25. Can Foreign Key contain duplicate values?
+Yes, duplicate values are allowed in Foreign Key columns.
+
+26. What is DECIMAL(10,2)?
+It stores decimal numbers with 10 digits total and 2 digits after decimal point.
+
+27. Which query displays item having maximum price?
+SELECT * FROM ITEMS
+WHERE Iprice = (SELECT MAX(Iprice) FROM ITEMS);
+
+28. Which query displays purchase records in descending date order?
+SELECT * FROM PURCHASE
+ORDER BY Pdate DESC;
+
+29. Which query counts total customers city-wise?
+SELECT Ccity, COUNT(*) AS total_customers
+FROM CUSTOMERS
+GROUP BY Ccity;
+
+30. What is normalization?
+Normalization is the process of reducing data redundancy and improving database organization.
