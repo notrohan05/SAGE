@@ -1,0 +1,206 @@
+CREATE DATABASE CompanyDB;
+
+USE CompanyDB;
+
+CREATE TABLE CUSTOMERS (
+    ID INT PRIMARY KEY,
+    NAME VARCHAR(50),
+    AGE INT,
+    ADDRESS VARCHAR(100),
+    SALARY DECIMAL(10,2)
+);
+
+CREATE TABLE Salary_Log (
+    Customer_ID INT,
+    Customer_Name VARCHAR(50),
+    Old_Salary DECIMAL(10,2),
+    New_Salary DECIMAL(10,2),
+    Salary_Difference DECIMAL(10,2)
+);
+
+INSERT INTO CUSTOMERS VALUES
+(1, 'Amit', 22, 'Pune', 25000),
+(2, 'Riya', 23, 'Mumbai', 30000);
+
+DELIMITER //
+
+CREATE TRIGGER customer_salary_trigger
+BEFORE UPDATE ON CUSTOMERS
+FOR EACH ROW
+BEGIN
+
+    INSERT INTO Salary_Log
+    VALUES (
+        OLD.ID,
+        OLD.NAME,
+        OLD.SALARY,
+        NEW.SALARY,
+        NEW.SALARY - OLD.SALARY
+    );
+
+END //
+
+DELIMITER ;
+
+UPDATE CUSTOMERS
+SET SALARY = 35000
+WHERE ID = 1;
+
+SELECT * FROM Salary_Log;
+
+
+
+Aim
+
+To create a MySQL trigger that automatically records customer salary updates and salary differences in a log table before updating salary records.
+
+Objective
+To understand the use of Triggers in MySQL.
+To learn the working of a BEFORE UPDATE Trigger.
+To store old and new salary values automatically.
+To calculate salary differences during updates.
+To maintain salary update history using a log table.
+
+Theory
+
+A Trigger is a database object that automatically executes when a specific event such as INSERT, UPDATE, or DELETE occurs on a table.
+
+In this program:
+
+A database named CompanyDB is created.
+Two tables are used:
+CUSTOMERS → stores customer details and salary.
+Salary_Log → stores salary update records.
+
+The trigger customer_salary_trigger executes before updating records in the CUSTOMERS table.
+
+The trigger performs the following operations:
+
+Retrieves old customer details using the OLD keyword.
+Retrieves updated salary using the NEW keyword.
+Calculates the salary difference using:
+
+Salary Difference=NEW.SALARY−OLD.SALARY
+
+Inserts:
+Customer ID
+Customer Name
+Old Salary
+New Salary
+Salary Difference
+
+into the Salary_Log table automatically before salary update.
+
+Triggers are useful for:
+
+Audit logging
+Tracking salary modifications
+Maintaining history records
+Reducing manual work
+
+Algorithm
+Start.
+Create database CompanyDB.
+Create table CUSTOMERS.
+Create table Salary_Log.
+Insert customer records into CUSTOMERS.
+Create trigger customer_salary_trigger.
+Before updating salary:
+Retrieve old salary using OLD.SALARY.
+Retrieve new salary using NEW.SALARY.
+Calculate salary difference.
+Insert salary update details into Salary_Log.
+Update salary record in CUSTOMERS.
+Display records from Salary_Log.
+Stop.
+
+Conclusion
+
+Thus, the MySQL trigger was successfully implemented to automatically maintain salary update records and calculate salary differences whenever customer salary information was updated.
+
+
+1. What is the purpose of this program?
+This program automatically stores customer salary update details in a log table using a trigger.
+
+2. What is a trigger in MySQL?
+A trigger is a set of SQL statements that automatically executes when events like INSERT, UPDATE, or DELETE occur on a table.
+
+3. What is the name of the database?
+The database name is CompanyDB.
+
+4. Which tables are used in this program?
+CUSTOMERS
+Salary_Log
+
+5. What is the purpose of the CUSTOMERS table?
+It stores customer details such as:
+ID
+Name
+Age
+Address
+Salary
+
+6. What is the purpose of the Salary_Log table?
+It stores salary update history of customers.
+
+7. What is the name of the trigger?
+The trigger name is customer_salary_trigger.
+
+8. Which type of trigger is used?
+A BEFORE UPDATE trigger is used.
+
+9. What does BEFORE UPDATE mean?
+The trigger executes automatically before updating records in the table.
+
+10. What does FOR EACH ROW mean?
+The trigger executes once for every row being updated.
+
+11. What is the purpose of the OLD keyword?
+OLD is used to access old values before update.
+
+12. What is the purpose of the NEW keyword?
+NEW is used to access new values after update.
+
+13. What does OLD.SALARY represent?
+It represents the old salary value before update.
+
+14. What does NEW.SALARY represent?
+It represents the updated salary value.
+
+15. How is salary difference calculated?
+Salary Difference=NEW.SALARY−OLD.SALARY
+
+16. Why is INSERT INTO Salary_Log used?
+It stores salary update details into the log table.
+
+17. Why is DELIMITER // used?
+It changes the default delimiter so MySQL can understand the complete trigger definition.
+
+18. What is the purpose of PRIMARY KEY in the CUSTOMERS table?
+It uniquely identifies each customer record.
+
+19. How do you update customer salary?
+UPDATE CUSTOMERS
+SET SALARY = 35000
+WHERE ID = 1;
+
+20. What happens when salary is updated?
+The trigger automatically stores old salary, new salary, and salary difference into Salary_Log.
+
+21. How can you display salary log records?
+SELECT * FROM Salary_Log;
+
+22. What are the advantages of triggers?
+Automatic execution
+Maintains data consistency
+Useful for auditing
+Reduces manual work
+
+23. Can a trigger execute automatically?
+Yes, triggers execute automatically when the specified event occurs.
+
+24. What event activates this trigger?
+The UPDATE event on the CUSTOMERS table activates the trigger.
+
+25. What is the main advantage of this program?
+It automatically maintains salary update history without manual insertion.
