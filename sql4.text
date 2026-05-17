@@ -1,0 +1,288 @@
+CREATE DATABASE Order;
+USE Order;
+
+CREATE TABLE Cust_Master(
+    cust_no VARCHAR(10) PRIMARY KEY,
+    cust_name VARCHAR(50) NOT NULL,
+    cust_addr VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Orders(
+    order_no INT PRIMARY KEY,
+    cust_no VARCHAR(10),
+    order_date DATE NOT NULL,
+    qty_ordered INT NOT NULL,
+    FOREIGN KEY(cust_no) REFERENCES Cust_Master(cust_no)
+);
+
+CREATE TABLE Product(
+    product_no INT PRIMARY KEY,
+    product_name VARCHAR(50) NOT NULL,
+    order_no INT,
+    FOREIGN KEY(order_no) REFERENCES Orders(order_no)
+);
+
+INSERT INTO Cust_Master VALUES
+('C1001','Raj','Pune'),
+('C1002','Aman','Banglore'),
+('C1003','Karan','Manglore'),
+('C1004','Ramesh','Mumbai'),
+('C1005','Sagar','Banglore'),
+('C1007','Mahesh','Manglore'),
+('C1008','Tarun','Delhi');
+
+INSERT INTO Orders VALUES
+(1,'C1002','2026-05-10',2),
+(2,'C1005','2026-05-11',5),
+(3,'C1007','2026-05-12',1),
+(4,'C1008','2026-05-13',3);
+
+INSERT INTO Product VALUES
+(101,'Laptop',1),
+(102,'Mouse',2),
+(103,'Keyboard',3),
+(104,'Monitor',4);
+
+SELECT cust_name
+FROM Cust_Master
+WHERE cust_name LIKE '_A%';
+
+SELECT *
+FROM Orders
+WHERE cust_no IN ('C1002','C1005','C1007','C1008');
+
+SELECT *
+FROM Cust_Master
+WHERE cust_addr IN ('Banglore','Manglore');
+
+SELECT C.cust_name, P.product_name
+FROM Cust_Master C
+JOIN Orders O
+ON C.cust_no = O.cust_no
+JOIN Product P
+ON O.order_no = P.order_no;
+
+CREATE VIEW View1 AS
+SELECT C.cust_name, P.product_name
+FROM Cust_Master C
+JOIN Orders O
+ON C.cust_no = O.cust_no
+JOIN Product P
+ON O.order_no = P.order_no;
+
+SELECT C.cust_name, P.product_name, O.qty_ordered
+FROM Cust_Master C
+JOIN Orders O
+ON C.cust_no = O.cust_no
+JOIN Product P
+ON O.order_no = P.order_no;
+
+SELECT C.cust_name, O.order_no
+FROM Cust_Master C
+INNER JOIN Orders O
+ON C.cust_no = O.cust_no;
+
+SELECT C.cust_name, O.order_no
+FROM Cust_Master C
+LEFT JOIN Orders O
+ON C.cust_no = O.cust_no;
+
+SELECT C.cust_name, O.order_no
+FROM Cust_Master C
+RIGHT JOIN Orders O
+ON C.cust_no = O.cust_no;
+
+SELECT C.cust_name, O.order_no
+FROM Cust_Master C
+LEFT JOIN Orders O
+ON C.cust_no = O.cust_no
+
+UNION
+
+SELECT C.cust_name, O.order_no
+FROM Cust_Master C
+RIGHT JOIN Orders O
+ON C.cust_no = O.cust_no;
+
+
+Aim
+
+To create and implement an Order Management Database using SQL and perform operations using JOINs, VIEW, UNION, pattern matching, and filtering queries.
+
+Objective
+To create a database for customer orders and products.
+To establish relationships between tables using Primary Key and Foreign Key.
+To insert records into tables.
+To perform SQL operations using:
+LIKE operator
+IN operator
+INNER JOIN
+LEFT JOIN
+RIGHT JOIN
+UNION
+VIEW
+To retrieve meaningful information from related tables.
+
+Theory
+
+A Database Management System (DBMS) is used to organize and manage data efficiently. SQL (Structured Query Language) is used to create databases, tables, and manipulate data.
+
+In this experiment, an Order database is created with the following tables:
+
+Cust_Master → Stores customer details.
+Orders → Stores order information.
+Product → Stores product details.
+
+Relationships between tables are maintained using Primary Key and Foreign Key constraints.
+
+Important SQL concepts used in this program:
+
+LIKE → Used for pattern matching.
+IN → Checks values within a list.
+INNER JOIN → Displays matching records from both tables.
+LEFT JOIN → Displays all records from left table and matching records from right table.
+RIGHT JOIN → Displays all records from right table and matching records from left table.
+UNION → Combines results of two queries.
+VIEW → Stores a virtual table based on a query.
+
+Algorithm
+Start.
+Create database Order.
+Select the database using USE Order.
+Create tables:
+Cust_Master
+Orders
+Product
+Define Primary Keys and Foreign Keys.
+Insert records into all tables.
+Execute SQL queries:
+Display customer names using LIKE operator.
+Display order details using IN operator.
+Display customers from selected cities.
+Display customer and product details using JOIN.
+Create a VIEW named View1.
+Display customer name, product name, and quantity ordered.
+Perform INNER JOIN operation.
+Perform LEFT JOIN operation.
+Perform RIGHT JOIN operation.
+Combine LEFT JOIN and RIGHT JOIN results using UNION.
+Display the output.
+Stop.
+
+Conclusion
+
+Thus, the Order Management Database was successfully created and various SQL operations such as JOINs, VIEW creation, UNION, pattern matching, and filtering were performed successfully. The experiment helped in understanding relationships between tables and retrieving related data efficiently using SQL queries.
+
+
+1. What is DBMS?
+DBMS (Database Management System) is software used to store, organize, and manage data efficiently.
+
+2. What is SQL?
+SQL (Structured Query Language) is used to create and manipulate databases.
+
+3. What is the purpose of CREATE DATABASE?
+It is used to create a new database.
+Example:
+CREATE DATABASE Order;
+
+4. What is a table?
+A table is a collection of rows and columns used to store related data.
+
+5. What is Primary Key?
+A Primary Key uniquely identifies each record in a table.
+Example:
+cust_no VARCHAR(10) PRIMARY KEY
+
+6. What is Foreign Key?
+A Foreign Key creates a relationship between two tables.
+Example:
+FOREIGN KEY(cust_no) REFERENCES Cust_Master(cust_no)
+
+7. Which table stores customer details?
+The Cust_Master table stores customer details.
+
+8. Which table stores order details?
+The Orders table stores order information.
+
+9. Which table stores product details?
+The Product table stores product information.
+
+10. What is the purpose of LIKE operator?
+LIKE is used for pattern matching.
+Example:
+WHERE cust_name LIKE '_A%';
+
+11. What does _A% mean in LIKE operator?
+_ → any single character
+A → second letter should be A
+% → any number of characters after that
+
+12. What is the purpose of IN operator?
+IN checks multiple values in a condition.
+Example:
+WHERE cust_no IN ('C1002','C1005');
+
+13. What is JOIN in SQL?
+JOIN combines data from multiple related tables.
+
+14. Which JOIN is used in this query?
+INNER JOIN is used.
+Example:
+JOIN Orders O
+ON C.cust_no = O.cust_no
+
+15. What is INNER JOIN?
+INNER JOIN returns only matching records from both tables.
+
+16. What is LEFT JOIN?
+LEFT JOIN returns all records from left table and matching records from right table.
+
+17. What is RIGHT JOIN?
+RIGHT JOIN returns all records from right table and matching records from left table.
+
+18. What is UNION?
+UNION combines results of two SELECT queries and removes duplicates.
+
+19. What is a VIEW in SQL?
+A VIEW is a virtual table created from a query.
+Example:
+CREATE VIEW View1 AS
+
+20. Why do we use VIEW?
+VIEW simplifies complex queries and improves security.
+
+21. What is the purpose of aliases like C, O, and P?
+Aliases provide short names to tables for easier query writing.
+
+22. What does SELECT * mean?
+It selects all columns from a table.
+
+23. What is the purpose of NOT NULL constraint?
+It prevents NULL values in a column.
+
+24. What is referential integrity?
+It ensures valid relationships between related tables.
+
+25. What happens if duplicate Primary Key is inserted?
+The database gives an error because Primary Key values must be unique.
+
+26. Can Foreign Key contain duplicate values?
+Yes, duplicate values are allowed in Foreign Key columns.
+
+27. What is the DATE data type?
+DATE stores date values in YYYY-MM-DD format.
+
+28. Which query displays customer name and product name?
+SELECT C.cust_name, P.product_name
+FROM Cust_Master C
+JOIN Orders O
+ON C.cust_no = O.cust_no
+JOIN Product P
+ON O.order_no = P.order_no;
+
+29. Which query creates a VIEW?
+CREATE VIEW View1 AS
+SELECT C.cust_name, P.product_name
+
+30. What is the advantage of JOIN operations?
+JOIN operations help retrieve related data from multiple tables efficiently.
