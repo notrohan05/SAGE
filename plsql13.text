@@ -1,0 +1,214 @@
+CREATE DATABASE College;
+USE College;
+
+CREATE TABLE O_RollCall (
+    RollNo INT PRIMARY KEY,
+    Name VARCHAR(50)
+);
+
+CREATE TABLE N_RollCall (
+    RollNo INT,
+    Name VARCHAR(50)
+);
+
+INSERT INTO O_RollCall VALUES (1, 'Amit');
+
+INSERT INTO N_RollCall VALUES
+(1, 'Amit'),
+(2, 'Riya'),
+(3, 'John'),
+(4, 'Sara');
+
+DELIMITER //
+
+CREATE PROCEDURE merge_rollcall()
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE v_roll INT;
+    DECLARE v_name VARCHAR(50);
+    DECLARE v_count INT;
+
+    -- cursor
+    DECLARE cur CURSOR FOR
+        SELECT RollNo, Name FROM N_RollCall;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    OPEN cur;
+
+    read_loop: LOOP
+
+        FETCH cur INTO v_roll, v_name;
+
+        IF done = 1 THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- check duplicate
+        SELECT COUNT(*) INTO v_count
+        FROM O_RollCall
+        WHERE RollNo = v_roll;
+
+        -- insert if not exists
+        IF v_count = 0 THEN
+            INSERT INTO O_RollCall VALUES (v_roll, v_name);
+        END IF;
+
+    END LOOP;
+
+    CLOSE cur;
+END //
+
+DELIMITER ;
+
+
+
+
+CALL merge_rollcall();
+
+SELECT * FROM O_RollCall;
+
+
+Aim
+
+To create a MySQL stored procedure using a cursor to merge records from N_RollCall table into O_RollCall table without inserting duplicate records.
+
+Objective
+To understand the use of cursors in MySQL.
+To learn how to use stored procedures.
+To merge records from one table to another.
+To avoid duplicate entries while inserting records.
+To use loops and conditional statements in SQL.
+Theory
+
+A cursor in MySQL is used to retrieve records one by one from a result set. It is useful when row-by-row processing is required.
+
+In this program:
+
+A database named College is created.
+Two tables are used:
+O_RollCall → Old roll call table
+N_RollCall → New roll call table
+
+The procedure merge_rollcall() performs the following operations:
+
+Reads records from N_RollCall using a cursor.
+Checks whether the record already exists in O_RollCall.
+If the record is not present, it inserts the record into O_RollCall.
+Duplicate records are skipped.
+
+The program uses:
+
+CURSOR
+LOOP
+IF condition
+CONTINUE HANDLER
+
+to process records one by one.
+
+Algorithm
+Start.
+Create database College.
+Create tables O_RollCall and N_RollCall.
+Insert records into both tables.
+Create stored procedure merge_rollcall().
+Declare variables and cursor.
+Open the cursor.
+Fetch records one by one from N_RollCall.
+Check whether the roll number already exists in O_RollCall.
+If record does not exist:
+Insert the record into O_RollCall.
+Repeat until all records are processed.
+Close the cursor.
+Execute the procedure.
+Display merged records from O_RollCall.
+Stop.
+
+Conclusion
+
+Thus, the MySQL stored procedure using a cursor was successfully implemented to merge records from the new roll call table into the old roll call table while avoiding duplicate entries.
+
+
+1. What is the purpose of this program?
+This program merges records from N_RollCall table into O_RollCall table without inserting duplicate records.
+
+2. What is the name of the database?
+The database name is College.
+
+3. Which tables are used in this program?
+O_RollCall
+N_RollCall
+
+4. What is the purpose of O_RollCall table?
+It stores the old roll call records.
+
+5. What is the purpose of N_RollCall table?
+It stores the new roll call records to be merged.
+
+6. What is a cursor in MySQL?
+A cursor is a database object used to fetch records one by one from a result set.
+
+7. Why is a cursor used in this program?
+The cursor is used to process each record from N_RollCall one at a time.
+
+8. What is the name of the cursor used?
+The cursor name is cur.
+
+9. What does this statement do?
+DECLARE cur CURSOR FOR
+SELECT RollNo, Name FROM N_RollCall;
+It creates a cursor to read records from N_RollCall.
+
+10. What is the purpose of DECLARE CONTINUE HANDLER?
+It handles the condition when no more records are available in the cursor.
+Example:
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+11. What is the purpose of the variable done?
+It indicates whether all records have been fetched from the cursor.
+
+12. What does OPEN cur do?
+It opens the cursor and starts record processing.
+
+13. What does FETCH do?
+It retrieves one row from the cursor into variables.
+Example:
+FETCH cur INTO v_roll, v_name;
+
+14. Why is LOOP used in this program?
+The loop repeatedly fetches and processes records until all records are completed.
+
+15. What does LEAVE read_loop do?
+It exits the loop when all records are fetched.
+
+16. What is the purpose of COUNT(*) in this program?
+It checks whether a roll number already exists in O_RollCall.
+
+17. Why is duplicate checking necessary?
+To avoid inserting the same roll number multiple times.
+
+18. What happens if v_count = 0?
+The record is inserted into O_RollCall.
+
+19. What is the purpose of PRIMARY KEY in O_RollCall?
+It ensures that duplicate roll numbers cannot exist.
+
+20. What does CLOSE cur do?
+It closes the cursor after processing all records.
+
+21. How do you execute the stored procedure?
+CALL merge_rollcall();
+
+22. How can you display merged records?
+SELECT * FROM O_RollCall;
+
+23. What are the advantages of using cursors?
+Row-by-row processing
+Better control over records
+Useful for complex operations
+
+24. What happens if the cursor is not closed?
+It may consume unnecessary database resources.
+
+25. What is the main advantage of this program?
+It merges records safely without inserting duplicate data.
