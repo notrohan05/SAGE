@@ -1,0 +1,239 @@
+CREATE DATABASE Library;
+USE Library;
+
+CREATE TABLE Borrower (
+    Rollin INT,
+    Name VARCHAR(50),
+    DateofIssue DATE,
+    NameofBook VARCHAR(100),
+    Status CHAR(1)
+);
+
+CREATE TABLE Fine (
+    Roll_no INT,
+    Date DATE,
+    Amt DECIMAL(10,2)
+);
+
+INSERT INTO Borrower VALUES
+(101, 'Amit', '2026-04-01', 'DBMS', 'I'),
+(102, 'Riya', '2026-03-10', 'OS', 'I');
+
+DELIMITER //
+
+CREATE PROCEDURE return_book (
+    IN p_rollno INT,
+    IN p_book VARCHAR(100)
+)
+BEGIN
+    DECLARE v_date DATE;
+    DECLARE v_days INT;
+    DECLARE v_fine DECIMAL(10,2) DEFAULT 0;
+
+    -- Get issue date
+    SELECT DateofIssue
+    INTO v_date
+    FROM Borrower
+    WHERE Rollin = p_rollno
+      AND NameofBook = p_book;
+
+    -- Calculate number of days
+    SET v_days = DATEDIFF(CURDATE(), v_date);
+
+    -- Fine rules
+    IF v_days BETWEEN 15 AND 30 THEN
+        SET v_fine = v_days * 5;
+
+    ELSEIF v_days > 30 THEN
+        SET v_fine = (30 * 5) + ((v_days - 30) * 50);
+
+    ELSE
+        SET v_fine = 0;
+    END IF;
+
+    -- Update status (Issued → Returned)
+    UPDATE Borrower
+    SET Status = 'R'
+    WHERE Rollin = p_rollno
+      AND NameofBook = p_book;
+
+    -- Insert fine if applicable
+    IF v_fine > 0 THEN
+        INSERT INTO Fine (Roll_no, Date, Amt)
+        VALUES (p_rollno, CURDATE(), v_fine);
+    END IF;
+
+END //
+
+DELIMITER ;
+
+CALL return_book(101, 'DBMS');
+
+SELECT * FROM Borrower;
+
+SELECT * FROM Fine;
+
+
+Aim
+
+To create a MySQL stored procedure for a library management system that calculates the fine for late book returns and updates the borrower status.
+
+Objective
+To understand the use of Stored Procedures in MySQL.
+To learn the use of IF–ELSE conditions in SQL.
+To calculate fines based on delayed book return days.
+To update records in database tables.
+To insert fine details into a separate table.
+Theory
+
+A Library Management System helps in maintaining records of books issued and returned by students.
+
+In this program:
+
+A database named Library is created.
+Two tables are used:
+Borrower → stores borrower and issued book details.
+Fine → stores fine information.
+
+The stored procedure return_book() performs the following tasks:
+
+Accepts:
+Roll number
+Book name
+Retrieves the issue date of the book.
+Calculates the number of days between issue date and current date using:
+
+Days=DATEDIFF(Current Date, Issue Date)
+
+Applies fine rules:
+15 to 30 days → ₹5 per day
+More than 30 days → ₹5/day for first 30 days and ₹50/day after 30 days
+Updates the status from:
+I → Issued
+R → Returned
+Inserts fine details into the Fine table if fine is applicable.
+
+Algorithm
+Start.
+Create database Library.
+Create tables Borrower and Fine.
+Insert borrower records into the table.
+Create stored procedure return_book().
+Accept roll number and book name as input.
+Fetch the issue date from Borrower table.
+Calculate delayed days using DATEDIFF().
+Check fine conditions:
+If days are between 15 and 30:
+Fine = days × 5
+Else if days are greater than 30:
+Fine = (30 × 5) + remaining days × 50
+Otherwise:
+Fine = 0
+Update borrower status to R.
+If fine is greater than 0:
+Insert fine details into Fine table.
+Display updated records.
+Stop.
+
+Conclusion
+
+Thus, the MySQL stored procedure for the library management system was successfully implemented. The procedure calculates fines for late book returns, updates the borrower status, and stores fine details in the database automatically.
+
+1. What is the purpose of this program?
+This program is used to manage book returns in a library and calculate fines for late returns.
+
+2. What is the name of the database?
+The database name is Library.
+
+3. Which tables are created in this program?
+Two tables are created:
+Borrower
+Fine
+
+4. What is the purpose of the Borrower table?
+It stores details of borrowed books such as:
+Roll number
+Student name
+Issue date
+Book name
+Status
+
+5. What is the purpose of the Fine table?
+It stores fine details for late book returns.
+
+6. What does Status CHAR(1) represent?
+It stores the status of the book:
+I → Issued
+R → Returned
+
+7. What is a stored procedure?
+A stored procedure is a collection of SQL statements stored in the database and executed when needed.
+
+8. What is the name of the stored procedure?
+The procedure name is return_book.
+
+9. What are the input parameters of the procedure?
+p_rollno
+p_book
+
+10. Why is DELIMITER // used?
+It changes the default delimiter so MySQL can properly read the complete procedure.
+
+11. What is the use of DECLARE in this procedure?
+DECLARE is used to create local variables.
+Example:
+DECLARE v_days INT;
+
+12. Which variables are declared in the procedure?
+v_date
+v_days
+v_fine
+
+13. What is the purpose of SELECT ... INTO?
+It stores a value from a table into a variable.
+Example:
+SELECT DateofIssue INTO v_date
+FROM Borrower;
+
+14. What does DATEDIFF() do?
+It calculates the difference between two dates.
+Days=DATEDIFF(Current Date, Issue Date)
+
+15. What is the fine if the book is returned within 14 days?
+No fine is charged.
+
+16. What is the fine rule for 15 to 30 days delay?
+Fine = ₹5 per day.
+Fine=Days×5
+
+17. What is the fine rule for more than 30 days delay?
+First 30 days → ₹5/day
+Remaining days → ₹50/day
+
+18. What is the purpose of the IF–ELSEIF–ELSE statement?
+It is used for decision making based on the number of delayed days.
+
+19. What does the UPDATE statement do in this program?
+It changes the book status from I to R.
+
+20. Why is INSERT INTO Fine used?
+It stores the fine details into the Fine table.
+
+21. What does CURDATE() return?
+It returns the current system date.
+
+22. How do you execute the procedure?
+Using:
+CALL return_book(101, 'DBMS');
+
+23. How can you display all borrower records?
+SELECT * FROM Borrower;
+
+24. How can you display fine records?
+SELECT * FROM Fine;
+
+25. What are the advantages of stored procedures?
+Reduces repeated code
+Faster execution
+Better database management
+Improves security
