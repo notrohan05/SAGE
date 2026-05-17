@@ -1,0 +1,184 @@
+CREATE DATABASE PeopleDB;
+USE PeopleDB;
+
+DELIMITER //
+
+CREATE PROCEDURE Age_calc (
+    IN dob DATE,
+    OUT months INT,
+    OUT days INT
+)
+BEGIN
+    DECLARE years INT;
+
+    -- calculate full years
+    SET years = TIMESTAMPDIFF(YEAR, dob, CURDATE());
+
+    -- remaining months
+    SET months = TIMESTAMPDIFF(MONTH, dob, CURDATE()) % 12;
+
+    -- remaining days
+    SET days = TIMESTAMPDIFF(DAY, DATE_ADD(dob, INTERVAL years YEAR), CURDATE()) % 30;
+
+    -- return years (only return value possible via SELECT)
+    SELECT years AS Age_in_Years;
+END //
+
+DELIMITER ;
+
+
+Aim
+
+To create a MySQL stored procedure that calculates a person’s age in years, months, and days using the date of birth.
+
+Objective
+To understand the use of Stored Procedures in MySQL.
+To learn the use of IN and OUT parameters.
+To calculate age using MySQL date functions.
+To understand the use of TIMESTAMPDIFF() and DATE_ADD() functions.
+To return calculated values from a procedure.
+Theory
+
+A Stored Procedure is a collection of SQL statements stored in the database that can be executed whenever required.
+
+In this program:
+
+A database named PeopleDB is created.
+A procedure named Age_calc is created to calculate age details.
+
+The procedure accepts:
+
+dob → Date of birth (Input parameter)
+
+The procedure returns:
+
+months → Remaining months
+days → Remaining days
+
+The program uses MySQL date functions:
+
+TIMESTAMPDIFF()
+Calculates the difference between two dates.
+DATE_ADD()
+Adds a time interval to a date.
+
+The age in years is calculated using:
+
+Years=TIMESTAMPDIFF(YEAR, dob, CURDATE())
+
+The remaining months are calculated using:
+
+Months=TIMESTAMPDIFF(MONTH, dob, CURDATE())mod12
+
+The remaining days are calculated using:
+
+Days=TIMESTAMPDIFF(DAY, DATE_ADD(dob, INTERVAL years YEAR), CURDATE())mod30
+
+The procedure displays years using SELECT and stores months and days in output variables.
+
+Algorithm
+Start.
+Create database PeopleDB.
+Create stored procedure Age_calc.
+Accept date of birth as input.
+Calculate full years using TIMESTAMPDIFF().
+Calculate remaining months.
+Calculate remaining days.
+Store months and days in output parameters.
+Display age in years.
+Call the procedure with a date of birth.
+Display months and days using output variables.
+Stop.
+
+Conclusion
+
+Thus, the MySQL stored procedure was successfully implemented to calculate age in years, months, and days using date functions and output parameters.
+
+CALL Age_calc('2003-05-10', @m, @d);
+
+SELECT @m AS Months, @d AS Days;
+
+
+
+1. What is the purpose of this program?
+This program calculates a person's age in years, months, and days using the date of birth.
+
+2. What is the name of the database?
+The database name is PeopleDB.
+
+3. What is a stored procedure?
+A stored procedure is a set of SQL statements stored in the database and executed whenever needed.
+
+4. What is the name of the stored procedure?
+The procedure name is Age_calc.
+
+5. What are the parameters used in the procedure?
+dob → Input parameter
+months → Output parameter
+days → Output parameter
+
+6. What is the purpose of IN parameter?
+IN parameter is used to pass input values into the procedure.
+Example:
+IN dob DATE
+
+7. What is the purpose of OUT parameter?
+OUT parameter is used to return values from the procedure.
+
+8. Which variable is declared inside the procedure?
+DECLARE years INT;
+The variable years is declared.
+
+9. What is the purpose of TIMESTAMPDIFF()?
+It calculates the difference between two dates.
+
+10. How are years calculated?
+Years=TIMESTAMPDIFF(YEAR, dob, CURDATE())
+
+11. How are months calculated?
+Months=TIMESTAMPDIFF(MONTH, dob, CURDATE())mod12
+
+12. How are days calculated?
+Days=TIMESTAMPDIFF(DAY, DATE_ADD(dob, INTERVAL years YEAR), CURDATE())mod30
+
+13. What is the purpose of CURDATE()?
+It returns the current system date.
+
+14. What is the purpose of DATE_ADD()?
+It adds a specified interval to a date.
+
+15. Why is % 12 used in month calculation?
+It gives the remaining months after calculating complete years.
+
+16. Why is % 30 used in day calculation?
+It gives the approximate remaining days after calculating months.
+
+17. Why is SELECT years AS Age_in_Years used?
+It displays the calculated age in years.
+
+18. How do you execute the procedure?
+CALL Age_calc('2003-05-10', @m, @d);
+
+19. What are @m and @d?
+They are user-defined variables used to store output values.
+
+20. How can you display the output variables?
+SELECT @m AS Months, @d AS Days;
+
+21. Why is DELIMITER // used?
+It changes the default delimiter so MySQL can understand the complete procedure.
+
+22. What datatype is used for date of birth?
+DATE datatype is used.
+
+23. What is the advantage of stored procedures?
+Reduces repeated code
+Faster execution
+Better security
+Easy maintenance
+
+24. Can a procedure return multiple values?
+Yes, using OUT parameters.
+
+25. What is the main advantage of this program?
+It automatically calculates age accurately using MySQL date functions.
