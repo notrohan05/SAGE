@@ -1,0 +1,231 @@
+CREATE DATABASE College;
+USE College;
+
+CREATE TABLE Student (
+    Roll INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Attendance DECIMAL(5,2),
+    Status VARCHAR(20)
+);
+
+INSERT INTO Student VALUES
+(1, 'Amit', 80, 'Unknown'),
+(2, 'Riya', 60, 'Unknown'),
+(3, 'John', 90, 'Unknown');
+
+DELIMITER //
+
+CREATE PROCEDURE check_attendance (IN p_roll INT)
+BEGIN
+    DECLARE v_att DECIMAL(5,2);
+    DECLARE v_count INT;
+
+    -- Exception handler
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SELECT 'Error occurred during execution' AS Message;
+    END;
+
+    -- check if roll exists
+    SELECT COUNT(*) INTO v_count
+    FROM Student
+    WHERE Roll = p_roll;
+
+    IF v_count = 0 THEN
+        SELECT 'Roll number not found' AS Message;
+
+    ELSE
+        -- get attendance
+        SELECT Attendance INTO v_att
+        FROM Student
+        WHERE Roll = p_roll;
+
+        -- check condition
+        IF v_att < 75 THEN
+            UPDATE Student
+            SET Status = 'Detained'
+            WHERE Roll = p_roll;
+
+            SELECT 'Term not granted' AS Message;
+
+        ELSE
+            UPDATE Student
+            SET Status = 'Not Detained'
+            WHERE Roll = p_roll;
+
+            SELECT 'Term granted' AS Message;
+        END IF;
+
+    END IF;
+
+END //
+
+DELIMITER ;
+
+
+Aim
+
+To create a MySQL stored procedure that checks student attendance and updates the detention status based on attendance percentage.
+
+Objective
+To understand the use of Stored Procedures in MySQL.
+To learn the use of IF–ELSE conditions.
+To implement exception handling using handlers.
+To update records in a database table based on conditions.
+To determine whether a student is detained or not detained according to attendance.
+Theory
+
+A Stored Procedure is a collection of SQL statements stored in the database that can be executed whenever required.
+
+In this program:
+
+A database named College is created.
+A table named Student stores:
+Roll number
+Student name
+Attendance percentage
+Status
+
+The procedure check_attendance() performs the following tasks:
+
+Accepts a student roll number as input.
+Checks whether the roll number exists in the table.
+Retrieves the attendance percentage of the student.
+Compares attendance with the required minimum attendance of 75%.
+
+Condition used:
+
+Attendance<75%
+
+If attendance is less than 75%:
+Status is updated to Detained
+Message: “Term not granted”
+Otherwise:
+Status is updated to Not Detained
+Message: “Term granted”
+
+The program also uses an Exception Handler to display an error message if any SQL error occurs during execution.
+
+Algorithm
+Start.
+Create database College.
+Create table Student.
+Insert student records into the table.
+Create stored procedure check_attendance().
+Accept roll number as input.
+Check whether the roll number exists.
+If roll number does not exist:
+Display “Roll number not found”.
+Otherwise:
+Retrieve attendance percentage.
+Check attendance condition:
+If attendance < 75:
+Update status as Detained
+Display “Term not granted”
+Else:
+Update status as Not Detained
+Display “Term granted”
+Handle any SQL errors using exception handler.
+Display updated student records.
+Stop.
+
+Conclusion
+
+Thus, the MySQL stored procedure was successfully implemented to check student attendance and update detention status automatically based on attendance percentage using conditional statements and exception handling.
+
+CALL check_attendance(2);
+
+SELECT * FROM Student;
+
+
+1. What is the purpose of this program?
+This program checks student attendance and updates the detention status based on attendance percentage.
+
+2. What is the name of the database?
+The database name is College.
+
+3. What is the name of the table used?
+The table name is Student.
+
+4. What are the columns in the Student table?
+Roll
+Name
+Attendance
+Status
+
+5. What is the purpose of the PRIMARY KEY?
+It uniquely identifies each student record and prevents duplicate roll numbers.
+
+6. What is a stored procedure?
+A stored procedure is a set of SQL statements stored in the database and executed whenever needed.
+
+7. What is the name of the stored procedure?
+The procedure name is check_attendance.
+
+8. What is the input parameter of the procedure?
+IN p_roll INT
+It accepts the student roll number.
+
+9. What is the purpose of DECLARE?
+DECLARE is used to create local variables inside the procedure.
+
+10. Which variables are declared in this procedure?
+v_att
+v_count
+
+11. What is the purpose of v_att?
+It stores the attendance percentage of the student.
+
+12. What is the purpose of v_count?
+It checks whether the roll number exists in the table.
+
+13. What is exception handling?
+Exception handling is used to manage errors during program execution.
+
+14. What does this statement do?
+DECLARE EXIT HANDLER FOR SQLEXCEPTION
+It handles SQL errors and displays an error message.
+
+15. What is the use of COUNT(*) in this program?
+It counts matching records to check whether the roll number exists.
+
+16. What happens if the roll number is not found?
+The program displays:
+'Roll number not found'
+
+17. What does SELECT ... INTO do?
+It stores a value from a table into a variable.
+Example:
+SELECT Attendance INTO v_att
+FROM Student;
+
+18. What condition is used to check attendance?
+Attendance<75%
+
+19. What happens if attendance is less than 75%?
+Status becomes Detained
+Message displayed: Term not granted
+
+20. What happens if attendance is 75% or more?
+Status becomes Not Detained
+Message displayed: Term granted
+
+21. What does the UPDATE statement do?
+It updates the student status in the table.
+
+22. How do you execute the procedure?
+CALL check_attendance(2);
+
+23. How can you display all student records?
+SELECT * FROM Student;
+
+24. Why is DELIMITER // used?
+It changes the default delimiter so MySQL can understand the complete stored procedure.
+
+25. What are the advantages of stored procedures?
+Reduces repeated code
+Faster execution
+Better database security
+Easier maintenance
+
+
