@@ -1,0 +1,261 @@
+CREATE DATABASE Company;
+USE Company;
+
+CREATE TABLE Employee(
+    emp_id INT PRIMARY KEY,
+    employee_name VARCHAR(50) UNIQUE,
+    street VARCHAR(100) NOT NULL,
+    city VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Company(
+    company_name VARCHAR(50) PRIMARY KEY,
+    city VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Works(
+    employee_name VARCHAR(50),
+    company_name VARCHAR(50),
+    salary DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY(employee_name, company_name),
+    FOREIGN KEY(company_name) REFERENCES Company(company_name)
+);
+
+CREATE TABLE Manages(
+    employee_name VARCHAR(50),
+    manager_name VARCHAR(50),
+    PRIMARY KEY(employee_name),
+    FOREIGN KEY(employee_name) REFERENCES Employee(employee_name)
+);
+
+INSERT INTO Employee VALUES
+(101,'Aditya','JM Road','Pune'),
+(102,'Rahul','FC Road','Mumbai'),
+(103,'Sneha','MG Road','Delhi'),
+(104,'Pooja','Camp','Hyderabad');
+
+INSERT INTO Company VALUES
+('TCS','Mumbai'),
+('InfoSys','Pune'),
+('TechM','Hyderabad');
+
+INSERT INTO Works VALUES
+('Aditya','TCS',25000),
+('Rahul','InfoSys',18000),
+('Sneha','TechM',12000),
+('Pooja','TechM',9000);
+
+INSERT INTO Manages VALUES
+('Aditya','Rahul'),
+('Rahul','Sneha'),
+('Sneha','Pooja');
+
+SELECT employee_name
+FROM Works
+WHERE company_name ='TCS';
+
+SELECT employee_name, company_name
+FROM Works
+ORDER BY company_name ASC, employee_name DESC;
+
+UPDATE Employee
+SET city ='Bangalore'
+WHERE employee_name IN
+(
+    SELECT employee_name
+    FROM Works
+    WHERE company_name ='InfoSys'
+);
+
+SELECT Employee.employee_name, Employee.street, Employee.city
+FROM Employee
+JOIN Works
+ON Employee.employee_name = Works.employee_name
+WHERE Works.company_name ='TechM'
+AND Works.salary > 10000;
+
+ALTER TABLE Company
+ADD Asset DECIMAL(12,2);
+
+
+Aim
+
+To create and implement a Company Database using SQL and perform operations such as table creation, data insertion, updating records, sorting data, joining tables, and altering table structure.
+
+Objective
+To create a company database with multiple related tables.
+To establish relationships using Primary Key and Foreign Key constraints.
+To insert records into tables.
+To perform SQL operations using:
+SELECT
+ORDER BY
+UPDATE
+JOIN
+ALTER TABLE
+To retrieve and manipulate employee and company information efficiently.
+
+Theory
+
+A Database Management System (DBMS) is used to store, organize, and manage data efficiently. SQL (Structured Query Language) is used to create databases, tables, and manipulate data.
+
+In this experiment, a database named Company is created with the following tables:
+
+Employee → Stores employee details.
+Company → Stores company information.
+Works → Stores employee work details such as company and salary.
+Manages → Stores manager-employee relationships.
+
+Important SQL concepts used:
+
+PRIMARY KEY → Uniquely identifies records.
+FOREIGN KEY → Maintains relationship between tables.
+UNIQUE → Prevents duplicate values.
+ORDER BY → Sorts records in ascending or descending order.
+UPDATE → Modifies existing records.
+JOIN → Combines data from multiple tables.
+ALTER TABLE → Modifies table structure by adding or changing columns.
+Algorithm
+Start.
+Create database Company.
+Select the database using USE Company.
+Create tables:
+Employee
+Company
+Works
+Manages
+Define Primary Keys, Foreign Keys, UNIQUE, and NOT NULL constraints.
+Insert sample records into all tables.
+Execute SQL queries:
+Display employee names working in TCS.
+Display employee and company names using ORDER BY.
+Update city of employees working in InfoSys.
+Display employees working in TechM having salary greater than 10000.
+Alter Company table by adding Asset column.
+Display the output.
+Stop
+
+Conclusion
+Thus, the Company database was successfully created and various SQL operations such as sorting, updating, joining tables, and altering table structure were performed successfully. The experiment helped in understanding database relationships and data manipulation techniques using SQL.
+
+
+1. What is DBMS?
+DBMS (Database Management System) is software used to store, manage, and retrieve data efficiently.
+
+2. What is SQL?
+SQL (Structured Query Language) is used to create and manipulate databases.
+
+3. What is the purpose of CREATE DATABASE?
+It is used to create a new database.
+Example:
+CREATE DATABASE Company;
+
+4. What is a Primary Key?
+A Primary Key uniquely identifies each record in a table.
+Example:
+emp_id INT PRIMARY KEY
+
+5. What is a Foreign Key?
+A Foreign Key creates a relationship between two tables.
+Example:
+FOREIGN KEY(company_name) REFERENCES Company(company_name)
+
+6. What is the purpose of UNIQUE constraint?
+UNIQUE prevents duplicate values in a column.
+Example:
+employee_name VARCHAR(50) UNIQUE
+
+7. What is the purpose of NOT NULL constraint?
+It prevents NULL values from being stored in a column.
+
+8. Which table stores employee details?
+The Employee table stores employee details.
+
+9. Which table stores company details?
+The Company table stores company details.
+
+10. What is the purpose of the Works table?
+The Works table stores employee company and salary details.
+
+11. What is the purpose of the Manages table?
+The Manages table stores manager-employee relationships.
+
+12. What is the purpose of ORDER BY clause?
+ORDER BY is used to sort records.
+Example:
+ORDER BY company_name ASC, employee_name DESC;
+
+13. What does ASC mean?
+ASC means ascending order.
+
+14. What does DESC mean?
+DESC means descending order.
+
+15. What is UPDATE command used for?
+UPDATE modifies existing records in a table.
+Example:
+UPDATE Employee
+SET city ='Bangalore'
+
+16. What is the purpose of IN operator?
+IN checks multiple values in a condition.
+
+17. What is a subquery?
+A subquery is a query written inside another query.
+Example:
+SELECT employee_name
+FROM Works
+WHERE company_name ='InfoSys'
+
+18. What is JOIN in SQL?
+JOIN combines data from multiple related tables.
+
+19. Which JOIN is used in this program?
+INNER JOIN is used.
+Example:
+JOIN Works
+ON Employee.employee_name = Works.employee_name
+
+20. What is ALTER TABLE command?
+ALTER TABLE is used to modify table structure.
+Example:
+ALTER TABLE Company
+ADD Asset DECIMAL(12,2);
+
+21. What is the purpose of ADD keyword in ALTER TABLE?
+
+ADD is used to add a new column to an existing table.
+
+22. What is DECIMAL(12,2)?
+It stores decimal values with 12 digits total and 2 digits after decimal point.
+
+23. What happens if duplicate Primary Key is inserted?
+The database gives an error because Primary Key values must be unique.
+
+24. Can Foreign Key contain duplicate values?
+Yes, Foreign Key values can repeat.
+
+25. What is referential integrity?
+It ensures valid relationships between related tables.
+
+26. Which query displays employees working in TCS?
+SELECT employee_name
+FROM Works
+WHERE company_name ='TCS';
+
+27. Which query updates employee city?
+UPDATE Employee
+SET city ='Bangalore'
+
+28. Which query displays employees of TechM having salary greater than 10000?
+SELECT Employee.employee_name, Employee.street, Employee.city
+FROM Employee
+JOIN Works
+ON Employee.employee_name = Works.employee_name
+WHERE Works.company_name ='TechM'
+AND Works.salary > 10000;
+
+29. What is the advantage of JOIN operation?
+JOIN helps retrieve related data from multiple tables efficiently.
+
+30. What is normalization?
+Normalization is the process of reducing data redundancy and improving database organization.
