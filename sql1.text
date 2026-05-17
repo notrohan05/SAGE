@@ -1,0 +1,354 @@
+-- Create Database
+CREATE DATABASE BankDB;
+
+-- Use Database
+USE BankDB;
+
+--------------------------------------------------
+-- Create Branch Table
+--------------------------------------------------
+
+CREATE TABLE Branch(
+    branch_name VARCHAR(50) PRIMARY KEY,
+    branch_city VARCHAR(50) NOT NULL,
+    asset DECIMAL(12,2) NOT NULL
+);
+
+--------------------------------------------------
+-- Create Account Table
+--------------------------------------------------
+
+CREATE TABLE Account(
+    acc_no INT PRIMARY KEY,
+    branch_name VARCHAR(50),
+    balance DECIMAL(10,2) NOT NULL,
+    
+    FOREIGN KEY(branch_name)
+    REFERENCES Branch(branch_name)
+);
+
+--------------------------------------------------
+-- Create Customer Table
+--------------------------------------------------
+
+CREATE TABLE Customer(
+    cust_name VARCHAR(50) PRIMARY KEY,
+    cust_street VARCHAR(100) NOT NULL,
+    cust_city VARCHAR(50) NOT NULL
+);
+
+--------------------------------------------------
+-- Create Depositor Table
+--------------------------------------------------
+
+CREATE TABLE Depositor(
+    cust_name VARCHAR(50),
+    acc_no INT,
+
+    PRIMARY KEY(cust_name, acc_no),
+
+    FOREIGN KEY(cust_name)
+    REFERENCES Customer(cust_name),
+
+    FOREIGN KEY(acc_no)
+    REFERENCES Account(acc_no)
+);
+
+--------------------------------------------------
+-- Create Loan Table
+--------------------------------------------------
+
+CREATE TABLE Loan(
+    loan_no INT PRIMARY KEY,
+    branch_name VARCHAR(50),
+    amount DECIMAL(10,2) NOT NULL,
+
+    FOREIGN KEY(branch_name)
+    REFERENCES Branch(branch_name)
+);
+
+--------------------------------------------------
+-- Create Borrower Table
+--------------------------------------------------
+
+CREATE TABLE Borrower(
+    cust_name VARCHAR(50),
+    loan_no INT,
+
+    PRIMARY KEY(cust_name, loan_no),
+
+    FOREIGN KEY(cust_name)
+    REFERENCES Customer(cust_name),
+
+    FOREIGN KEY(loan_no)
+    REFERENCES Loan(loan_no)
+);
+
+--------------------------------------------------
+-- Insert Sample Data
+--------------------------------------------------
+
+INSERT INTO Branch VALUES
+('Wadia College','Pune',500000),
+('Shivaji Nagar','Mumbai',700000),
+('FC Road','Pune',400000);
+
+INSERT INTO Account VALUES
+(101,'Wadia College',25000),
+(102,'FC Road',18000),
+(103,'Shivaji Nagar',30000);
+
+INSERT INTO Customer VALUES
+('Aditya','JM Road','Pune'),
+('Rahul','Camp','Pune'),
+('Sneha','MG Road','Mumbai');
+
+INSERT INTO Depositor VALUES
+('Aditya',101),
+('Rahul',102),
+('Sneha',103);
+
+INSERT INTO Loan VALUES
+(201,'Wadia College',15000),
+(202,'FC Road',10000),
+(203,'Wadia College',20000);
+
+INSERT INTO Borrower VALUES
+('Aditya',201),
+('Rahul',202),
+('Sneha',203);
+
+--------------------------------------------------
+-- 1. Find names of all branches in Loan relation
+--------------------------------------------------
+
+SELECT branch_name
+FROM Loan;
+
+--------------------------------------------------
+-- 2. Find all loan numbers for loans made at
+-- 'Wadia College' branch with amount > 12000
+--------------------------------------------------
+
+SELECT loan_no
+FROM Loan
+WHERE branch_name='Wadia College'
+AND amount > 12000;
+
+--------------------------------------------------
+-- 3. Find all customers who have a loan from bank
+-- Display customer name, loan_no and amount
+--------------------------------------------------
+
+SELECT Borrower.cust_name,
+       Loan.loan_no,
+       Loan.amount
+FROM Borrower
+JOIN Loan
+ON Borrower.loan_no = Loan.loan_no;
+
+--------------------------------------------------
+-- 4. List all customers in alphabetical order
+-- who have loan from 'Wadia College' branch
+--------------------------------------------------
+
+SELECT Borrower.cust_name
+FROM Borrower
+JOIN Loan
+ON Borrower.loan_no = Loan.loan_no
+WHERE Loan.branch_name='Wadia College'
+ORDER BY Borrower.cust_name ASC;
+
+--------------------------------------------------
+-- 5. Display distinct cities of branch
+--------------------------------------------------
+
+SELECT DISTINCT branch_city
+FROM Branch;
+
+
+
+
+Aim
+
+To study and implement SQL commands for creating and managing a Bank Database using different tables, relationships, and queries in DBMS.
+
+Objective
+To create a database named BankDB.
+To create tables using Primary Key and Foreign Key constraints.
+To insert records into the tables.
+To perform SQL queries for retrieving required information from the database.
+To understand relationships between different entities like Branch, Customer, Account, Loan, Depositor, and Borrower.
+
+Theory
+
+A Database Management System (DBMS) is software used to store, manage, and retrieve data efficiently. SQL (Structured Query Language) is used to perform operations on databases.
+
+In this experiment, a banking database is created containing multiple related tables:
+
+Branch → Stores branch details.
+Account → Stores account information.
+Customer → Stores customer details.
+Depositor → Connects customers and accounts.
+Loan → Stores loan information.
+Borrower → Connects customers and loans.
+
+Primary Keys uniquely identify records in a table, while Foreign Keys maintain relationships between tables.
+
+Various SQL queries are performed to:
+
+Retrieve branch names
+Find loan details
+Display customer loan information
+Sort customer names
+Display distinct branch cities
+
+Algorithm
+Start.
+Create the database BankDB.
+Select the database using USE BankDB.
+Create the Branch table with branch details.
+Create the Account table and connect it with Branch using Foreign Key.
+Create the Customer table.
+Create the Depositor table to link Customer and Account tables.
+Create the Loan table and connect it with Branch table.
+Create the Borrower table to link Customer and Loan tables.
+Insert sample records into all tables.
+Execute SQL queries:
+Display branch names from Loan table.
+Find loan numbers from Wadia College branch with amount greater than 12000.
+Display customer loan details.
+Display customers having loan from Wadia College branch in alphabetical order.
+Display distinct branch cities.
+Observe the output.
+Stop.
+
+Conclusion
+Thus, the Bank Database was successfully created using SQL commands. Tables were connected using Primary Key and Foreign Key constraints, sample records were inserted, and various SQL queries were executed successfully to retrieve the required information.
+
+
+1. What is DBMS?
+A DBMS (Database Management System) is software used to store, manage, and retrieve data efficiently.
+
+2. What is SQL?
+SQL (Structured Query Language) is a language used to create and manage databases.
+
+3. What is the purpose of CREATE DATABASE command?
+It is used to create a new database.
+Example:
+CREATE DATABASE BankDB;
+
+4. Why do we use USE BankDB?
+It selects the database in which we want to perform operations.
+
+5. What is a table in DBMS?
+A table is a collection of rows and columns used to store data.
+
+6. What is Primary Key?
+A Primary Key uniquely identifies each record in a table and cannot contain NULL values.
+Example:
+branch_name VARCHAR(50) PRIMARY KEY
+
+7. What is Foreign Key?
+A Foreign Key is used to create a relationship between two tables.
+Example:
+FOREIGN KEY(branch_name)
+REFERENCES Branch(branch_name)
+
+8. What is the difference between Primary Key and Foreign Key?
+Primary Key	Foreign Key
+Uniquely identifies records	Creates relationship between tables
+Cannot contain duplicate values	Can contain duplicate values
+Cannot be NULL	Can contain NULL
+
+9. What is the purpose of NOT NULL constraint?
+It ensures that a column cannot store NULL values.
+
+10. Why is the Depositor table used?
+It connects customers with their accounts.
+
+11. Why is the Borrower table used?
+It connects customers with loans.
+
+12. What is DECIMAL(10,2)?
+It stores decimal numbers with 10 total digits and 2 digits after the decimal point.
+Example:
+25000.00
+
+13. What is the purpose of DISTINCT keyword?
+It removes duplicate values from output.
+Example:
+SELECT DISTINCT branch_city FROM Branch;
+
+14. What is ORDER BY used for?
+It is used to sort records in ascending or descending order.
+Example:
+ORDER BY cust_name ASC;
+
+15. What is JOIN in SQL?
+JOIN is used to combine data from multiple tables.
+
+16. Which JOIN is used in this program?
+INNER JOIN is used.
+Example:
+JOIN Loan
+ON Borrower.loan_no = Loan.loan_no;
+
+17. What is the purpose of WHERE clause?
+It filters records based on conditions.
+
+18. What is the difference between DELETE, DROP, and TRUNCATE?
+Command	Purpose
+DELETE	Removes selected rows
+TRUNCATE	Removes all rows
+DROP	Deletes entire table
+
+19. What is normalization?
+Normalization is the process of organizing data to reduce redundancy.
+
+20. What are DDL commands?
+DDL (Data Definition Language) commands define database structure.
+Examples:
+CREATE
+ALTER
+DROP
+
+21. What are DML commands?
+DML (Data Manipulation Language) commands manipulate data.
+Examples:
+INSERT
+UPDATE
+DELETE
+
+22. What is the purpose of INSERT statement?
+It is used to add records into a table.
+
+23. Which table stores loan information?
+The Loan table stores loan information.
+
+24. Which table stores customer details?
+The Customer table stores customer details.
+
+25. Why are relationships important in DBMS?
+Relationships help connect related data between tables and avoid data duplication.
+
+26. What is a composite primary key?
+A primary key made using more than one column.
+Example:
+PRIMARY KEY(cust_name, acc_no)
+
+27. What happens if Foreign Key value does not exist in parent table?
+The record cannot be inserted because referential integrity is violated.
+
+28. What is referential integrity?
+It ensures valid relationships between related tables.
+
+29. What is the advantage of using DBMS?
+Reduces redundancy
+Improves security
+Easy data retrieval
+Better data management
+
+30. Which query displays branch cities without duplicates?
+SELECT DISTINCT branch_city
+FROM Branch;
