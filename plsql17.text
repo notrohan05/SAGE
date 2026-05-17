@@ -1,0 +1,244 @@
+CREATE DATABASE LibraryDB;
+
+USE LibraryDB;
+
+CREATE TABLE Library (
+    Book_id INT PRIMARY KEY,
+    Book_Name VARCHAR(50),
+    Author VARCHAR(50),
+    Price DECIMAL(10,2)
+);
+
+CREATE TABLE Library_Audit (
+    Book_id INT,
+    Book_Name VARCHAR(50),
+    Author VARCHAR(50),
+    Price DECIMAL(10,2),
+    Action_Type VARCHAR(20),
+    Action_Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO Library VALUES
+(1, 'DBMS', 'Korth', 500),
+(2, 'OS', 'Galvin', 600);
+
+DELIMITER //
+
+CREATE TRIGGER before_library_update
+BEFORE UPDATE ON Library
+FOR EACH ROW
+BEGIN
+
+    INSERT INTO Library_Audit
+    VALUES (
+        OLD.Book_id,
+        OLD.Book_Name,
+        OLD.Author,
+        OLD.Price,
+        'BEFORE UPDATE',
+        NOW()
+    );
+
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER after_library_delete
+AFTER DELETE ON Library
+FOR EACH ROW
+BEGIN
+
+    INSERT INTO Library_Audit
+    VALUES (
+        OLD.Book_id,
+        OLD.Book_Name,
+        OLD.Author,
+        OLD.Price,
+        'AFTER DELETE',
+        NOW()
+    );
+
+END //
+
+DELIMITER ;
+
+UPDATE Library
+SET Price = 700
+WHERE Book_id = 1;
+
+DELETE FROM Library
+WHERE Book_id = 2;
+
+SELECT * FROM Library;
+
+SELECT * FROM Library_Audit;
+
+
+Aim
+
+To create MySQL triggers that maintain an audit log for update and delete operations performed on the Library table.
+
+Objective
+To understand the use of Triggers in MySQL.
+To learn the working of BEFORE UPDATE and AFTER DELETE triggers.
+To maintain audit records automatically.
+To store old data before update and delete operations.
+To track database modifications using an audit table.
+
+Theory
+
+A Trigger is a database object that automatically executes when events such as INSERT, UPDATE, or DELETE occur on a table.
+
+In this program:
+
+A database named LibraryDB is created.
+Two tables are used:
+Library → stores book details.
+Library_Audit → stores audit records of updated and deleted data.
+
+Two triggers are created:
+
+1. BEFORE UPDATE Trigger
+
+Trigger Name: before_library_update
+
+Executes before updating records in the Library table.
+Stores the old record values into the Library_Audit table before modification.
+2. AFTER DELETE Trigger
+
+Trigger Name: after_library_delete
+
+Executes after deleting records from the Library table.
+Stores deleted record details into the Library_Audit table.
+
+The triggers use:
+
+OLD keyword → accesses old record values before update or delete.
+NOW() → stores current date and time.
+
+Audit logging helps in:
+
+Data tracking
+Data recovery
+Security monitoring
+Maintaining database history
+
+Algorithm
+Start.
+Create database LibraryDB.
+Create tables Library and Library_Audit.
+Insert sample records into Library.
+Create BEFORE UPDATE trigger.
+Before updating a book record:
+Store old record values into Library_Audit.
+Create AFTER DELETE trigger.
+After deleting a book record:
+Store deleted record values into Library_Audit.
+Perform update operation on Library.
+Perform delete operation on Library.
+Display records from Library.
+Display audit records from Library_Audit.
+Stop.
+
+Conclusion
+
+Thus, the MySQL triggers were successfully implemented to maintain audit records for update and delete operations on the Library table automatically using an audit table.
+
+
+
+1. What is the purpose of this program?
+This program maintains an audit log for update and delete operations performed on the Library table.
+
+2. What is the name of the database?
+The database name is LibraryDB.
+
+3. Which tables are used in this program?
+Library
+Library_Audit
+
+4. What is the purpose of the Library table?
+It stores book details such as:
+Book ID
+Book Name
+Author
+Price
+
+5. What is the purpose of the Library_Audit table?
+It stores audit records of updated and deleted book data.
+
+6. What is a trigger in MySQL?
+A trigger is a set of SQL statements that automatically executes when events like UPDATE or DELETE occur on a table.
+
+7. Which triggers are used in this program?
+before_library_update
+after_library_delete
+
+8. Which type of trigger is before_library_update?
+It is a BEFORE UPDATE trigger.
+
+9. Which type of trigger is after_library_delete?
+It is an AFTER DELETE trigger.
+
+10. What does FOR EACH ROW mean?
+The trigger executes once for every affected row.
+
+11. What is the purpose of the OLD keyword?
+OLD is used to access old values before update or delete operations.
+
+12. What does OLD.Price represent?
+It represents the old price value before updating or deleting the record.
+
+13. Why is INSERT INTO Library_Audit used?
+It stores old records into the audit table for tracking purposes.
+
+14. What is the purpose of NOW()?
+It returns the current date and time.
+
+15. What is stored in the Action_Type column?
+It stores the type of operation performed:
+BEFORE UPDATE
+AFTER DELETE
+
+16. Why is an audit table important?
+It helps in:
+Tracking changes
+Data recovery
+Security monitoring
+Maintaining history
+
+17. What happens before updating a book record?
+The old record values are stored in Library_Audit.
+
+18. What happens after deleting a book record?
+The deleted record details are stored in Library_Audit.
+
+19. How do you update a record in this program?
+UPDATE Library
+SET Price = 700
+WHERE Book_id = 1;
+
+20. How do you delete a record in this program?
+DELETE FROM Library
+WHERE Book_id = 2;
+
+21. Why is DELIMITER // used?
+It changes the default delimiter so MySQL can understand the complete trigger definition.
+
+22. What is the purpose of PRIMARY KEY in the Library table?
+It uniquely identifies each book record.
+
+23. How can you display library records?
+SELECT * FROM Library;
+
+24. How can you display audit records?
+SELECT * FROM Library_Audit;
+
+25. What are the advantages of triggers?
+Automatic execution
+Reduces manual work
+Maintains data consistency
+Useful for auditing and logging
+
+
