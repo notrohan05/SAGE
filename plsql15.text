@@ -1,0 +1,210 @@
+CREATE DATABASE Company;
+USE Company;
+
+CREATE TABLE emp (
+    emp_no INT PRIMARY KEY,
+    salary DECIMAL(10,2)
+);
+
+CREATE TABLE increment_salary (
+    emp_no INT,
+    salary DECIMAL(10,2)
+);
+
+INSERT INTO emp VALUES
+(1, 20000),
+(2, 30000),
+(3, 50000),
+(4, 15000);
+
+DELIMITER //
+
+CREATE TRIGGER salary_increment
+BEFORE UPDATE ON emp
+FOR EACH ROW
+BEGIN
+    DECLARE avg_sal DECIMAL(10,2);
+
+    -- calculate average salary
+    SELECT AVG(salary) INTO avg_sal FROM emp;
+
+    -- check condition
+    IF OLD.salary < avg_sal THEN
+
+        -- increase salary by 10%
+        SET NEW.salary = OLD.salary + (OLD.salary * 0.10);
+
+        -- insert record into log table
+        INSERT INTO increment_salary(emp_no, salary)
+        VALUES (OLD.emp_no, NEW.salary);
+
+    END IF;
+
+END //
+
+DELIMITER ;
+
+UPDATE emp
+SET salary = salary
+WHERE emp_no = 1;
+
+UPDATE emp SET salary = 25000 WHERE emp_no = 1;
+
+
+Aim
+
+To create a MySQL trigger that automatically increases employee salary by 10% if the employee’s salary is below the average salary and stores the updated details in a log table.
+
+Objective
+To understand the use of Triggers in MySQL.
+To learn the use of BEFORE UPDATE Trigger.
+To calculate average salary using SQL functions.
+To automatically update employee salary based on conditions.
+To maintain a log of incremented salaries.
+
+Theory
+
+A Trigger in MySQL is a set of SQL statements that automatically executes when a specific database event occurs such as INSERT, UPDATE, or DELETE.
+
+In this program:
+
+A database named Company is created.
+Two tables are used:
+emp → stores employee details and salary.
+increment_salary → stores records of salary increments.
+
+The trigger salary_increment is executed before updating records in the emp table.
+
+The trigger performs the following tasks:
+
+Calculates the average salary of all employees.
+Checks whether the employee’s old salary is less than the average salary.
+
+Condition used:
+
+OLD.salary<AVG(salary)
+
+If the condition is true:
+Salary is increased by 10%.
+
+Salary increment formula:
+
+New Salary=Old Salary+(Old Salary×0.10)
+
+The updated salary details are inserted into the increment_salary table.
+
+The trigger uses:
+
+OLD keyword → old value before update
+NEW keyword → new value after update
+
+Algorithm
+Start.
+Create database Company.
+Create tables emp and increment_salary.
+Insert employee records into emp.
+Create trigger salary_increment.
+Calculate average salary from emp table.
+Before updating a record:
+Check if old salary is less than average salary.
+If condition is true:
+Increase salary by 10%.
+Store updated salary details in increment_salary table.
+Update employee records.
+Display updated employee table.
+Display increment log table.
+Stop.
+
+Conclusion
+
+Thus, the MySQL trigger was successfully implemented to automatically increase employee salaries below the average salary and maintain a record of salary increments in a separate table.
+
+SELECT * FROM emp;
+
+
+
+
+1. What is the purpose of this program?
+This program automatically increases employee salary by 10% if the salary is below the average salary.
+
+2. What is a trigger in MySQL?
+A trigger is a set of SQL statements that automatically executes when an event like INSERT, UPDATE, or DELETE occurs on a table.
+
+3. What is the name of the database?
+The database name is Company.
+
+4. Which tables are used in this program?
+emp
+increment_salary
+
+5. What is the purpose of the emp table?
+It stores employee numbers and salaries.
+
+6. What is the purpose of the increment_salary table?
+It stores records of employees whose salary was increased.
+
+7. What is the name of the trigger?
+The trigger name is salary_increment.
+
+8. Which type of trigger is used?
+A BEFORE UPDATE trigger is used.
+
+9. What does BEFORE UPDATE mean?
+The trigger executes automatically before updating a record in the table.
+
+10. What does FOR EACH ROW mean?
+The trigger executes once for every row being updated.
+
+11. What is the purpose of AVG() function?
+It calculates the average salary of employees.
+Example:
+SELECT AVG(salary) FROM emp;
+
+12. What is stored in the variable avg_sal?
+It stores the average salary of all employees.
+
+13. What does this condition check?
+OLD.salary<AVG(salary)
+It checks whether the employee’s old salary is less than the average salary.
+
+14. What is the purpose of OLD.salary?
+It represents the salary value before update.
+
+15. What is the purpose of NEW.salary?
+It represents the updated salary value after modification.
+
+16. How is the salary increased in this program?
+New Salary=Old Salary+(Old Salary×0.10)
+
+17. Why is INSERT INTO increment_salary used?
+It stores incremented salary details in the log table.
+
+18. Why is DELIMITER // used?
+It changes the default delimiter so MySQL can understand the complete trigger definition.
+
+19. What happens if the salary is greater than the average salary?
+No salary increment is given.
+
+20. How do you trigger the execution?
+By updating the emp table.
+Example:
+UPDATE emp SET salary = 25000 WHERE emp_no = 1;
+
+21. What is the purpose of PRIMARY KEY in the emp table?
+It prevents duplicate employee numbers.
+
+22. What will happen when employee 1 is updated?
+If employee 1 salary is below average salary, the trigger increases the salary by 10%.
+
+23. How can you display employee records?
+SELECT * FROM emp;
+
+24. How can you display increment records?
+SELECT * FROM increment_salary;
+
+25. What are the advantages of triggers?
+Automatic execution
+Reduces manual work
+Maintains data consistency
+Useful for auditing and logging
+
