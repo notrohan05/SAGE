@@ -1,0 +1,173 @@
+CREATE DATABASE circle_db;
+USE circle_db;
+
+CREATE TABLE areas (
+    radius INT,
+    area DECIMAL(10,2)
+);
+
+DELIMITER //
+
+CREATE PROCEDURE calculate_circle_area()
+BEGIN
+    DECLARE r INT DEFAULT 5;
+    DECLARE a DECIMAL(10,2);
+
+    WHILE r <= 9 DO
+        SET a = 3.14 * r * r;
+
+        INSERT INTO areas(radius, area)
+        VALUES (r, a);
+
+        SET r = r + 1;
+    END WHILE;
+
+
+Aim
+
+To create a MySQL stored procedure that calculates the area of circles for radius values from 5 to 9 and stores the results in a table.
+
+Objective
+To understand the use of Stored Procedures in MySQL.
+To learn the use of the WHILE loop in SQL.
+To perform mathematical calculations inside a procedure.
+To insert calculated values into a database table.
+
+Theory
+
+A Stored Procedure in MySQL is a set of SQL statements stored in the database that can be executed whenever needed. It helps in reducing repeated code and improves database management.
+
+In this program:
+
+A database named circle_db is created.
+A table named areas stores:
+radius of the circle
+calculated area
+A stored procedure calculate_circle_area() is used.
+The procedure uses a WHILE loop to calculate the area for radius values from 5 to 9.
+Formula used for area of circle:
+A=πr
+2
+
+Where:
+
+A = Area of circle
+r = Radius
+π≈3.14
+
+The calculated values are inserted into the areas table.
+
+Algorithm
+Start.
+Create a database circle_db.
+Select the database using USE.
+Create a table areas with columns radius and area.
+Create a stored procedure calculate_circle_area().
+Declare variables:
+r for radius
+a for area
+Initialize radius value as 5.
+Repeat the following steps while r <= 9:
+Calculate area using formula 3.14 * r * r
+Insert radius and area into the table
+Increment radius by 1
+End loop.
+Stop.
+
+Conclusion
+Thus, the MySQL stored procedure was successfully created to calculate the area of circles for different radius values and store the results in the database table using a WHILE loop. 
+
+1. What is a database?
+A database is a collection of related data stored in an organized manner.
+
+2. What is the name of the database created in this program?
+The database name is circle_db.
+
+3. What is the purpose of the USE statement?
+The USE statement selects the database to work with.
+Example:
+USE circle_db;
+
+4. What is a table?
+A table stores data in rows and columns.
+
+5. What is the name of the table created?
+The table name is areas.
+
+6. What are the columns in the areas table?
+radius
+area
+
+7. What is DECIMAL(10,2)?
+It is a datatype used for decimal numbers with:
+10 total digits
+2 digits after the decimal point
+
+8. What is a stored procedure?
+A stored procedure is a group of SQL statements stored in the database that can be executed whenever needed.
+
+9. What is the name of the stored procedure?
+The procedure name is calculate_circle_area.
+
+10. Why is DELIMITER // used?
+It changes the default delimiter (;) so MySQL can understand the complete procedure definition.
+
+11. What is the purpose of DECLARE?
+DECLARE is used to create variables inside the procedure.
+Example:
+DECLARE r INT DEFAULT 5;
+
+12. Which variables are used in this procedure?
+r → stores radius
+a → stores area
+
+13. What is the default value of r?
+The default value is 5.
+
+14. Which loop is used in the program?
+The WHILE loop is used.
+
+15. What is the condition in the WHILE loop?
+WHILE r <= 9
+The loop runs until radius becomes greater than 9.
+
+16. What formula is used to calculate the area of a circle?
+A=πr
+2
+
+17. What does SET do in MySQL?
+SET assigns a value to a variable.
+Example:
+SET r = r + 1;
+
+18. Why is INSERT INTO used?
+It inserts calculated values into the table.
+
+19. How many records will be inserted into the table?
+5 records will be inserted for radius values:
+5, 6, 7, 8, and 9.
+
+20. What happens if SET r = r + 1 is removed?
+The loop will run forever because the value of r will never increase.
+
+21. How do you execute the stored procedure?
+Using:
+CALL calculate_circle_area();
+
+22. How can you display the inserted records?
+Using:
+SELECT * FROM areas;
+
+23. What is the advantage of stored procedures?
+Reduces repeated code
+Improves performance
+Makes programs easier to manage
+
+24. What is the purpose of the WHILE loop in this program?
+It repeatedly calculates and stores areas for multiple radius values.
+
+25. What will be the area when radius is 5?
+A=3.14×5
+2
+Result = 78.50
+
