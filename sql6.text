@@ -1,0 +1,254 @@
+CREATE DATABASE Companies;
+USE Companies;
+
+CREATE TABLE Companies(
+    comp_id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    cost DECIMAL(10,2),
+    year INT
+);
+
+CREATE TABLE Orders(
+    comp_id INT,
+    domain VARCHAR(50),
+    quantity INT,
+    FOREIGN KEY(comp_id) REFERENCES Companies(comp_id)
+);
+
+SELECT C.name, C.cost, O.domain, O.quantity
+FROM Companies C
+INNER JOIN Orders O
+ON C.comp_id = O.comp_id;
+
+SELECT C.name, C.cost, O.domain, O.quantity
+FROM Companies C
+LEFT JOIN Orders O
+ON C.comp_id = O.comp_id;
+
+SELECT C.name, C.cost, O.domain, O.quantity
+FROM Companies C
+RIGHT JOIN Orders O
+ON C.comp_id = O.comp_id;
+
+SELECT C.name, C.cost, O.domain, O.quantity
+FROM Companies C
+LEFT JOIN Orders O
+ON C.comp_id = O.comp_id
+
+UNION
+
+SELECT C.name, C.cost, O.domain, O.quantity
+FROM Companies C
+RIGHT JOIN Orders O
+ON C.comp_id = O.comp_id;
+
+CREATE VIEW View1 AS
+SELECT C.name, O.quantity
+FROM Companies C
+JOIN Orders O
+ON C.comp_id = O.comp_id;
+
+CREATE VIEW View2 AS
+SELECT comp_id, name
+FROM Companies;
+
+INSERT INTO View2 VALUES (101, 'TCS');
+
+UPDATE View2
+SET name = 'Infosys'
+WHERE comp_id = 101;
+
+DELETE FROM View2
+WHERE comp_id = 101;
+
+INSERT INTO Companies VALUES (1, 'TCS', 50000, 2023);
+INSERT INTO Orders VALUES (1, 'IT', 10);
+
+SELECT * FROM View1;
+
+SELECT * FROM View2;
+
+SELECT * FROM Companies;
+
+
+Aim
+
+To create and implement a Companies Database using SQL and perform operations using JOINs, VIEWs, INSERT, UPDATE, DELETE, and UNION queries.
+
+Objective
+To create database tables for companies and orders.
+To establish relationships using Primary Key and Foreign Key constraints.
+To perform different JOIN operations.
+To create and use SQL VIEWs.
+To perform INSERT, UPDATE, and DELETE operations through VIEWs.
+To retrieve and manipulate data efficiently using SQL queries.
+
+Theory
+
+A Database Management System (DBMS) is used to store, organize, and manage data efficiently. SQL (Structured Query Language) is used to create databases, tables, and manipulate stored data.
+
+In this experiment, a database named Companies is created with the following tables:
+
+Companies → Stores company details such as company id, name, cost, and year.
+Orders → Stores order information such as domain and quantity.
+
+Important SQL concepts used:
+
+PRIMARY KEY → Uniquely identifies records in a table.
+FOREIGN KEY → Creates relationship between tables.
+INNER JOIN → Displays matching records from both tables.
+LEFT JOIN → Displays all records from left table and matching records from right table.
+RIGHT JOIN → Displays all records from right table and matching records from left table.
+UNION → Combines results of multiple queries.
+VIEW → Creates a virtual table from a query.
+INSERT → Adds new records.
+UPDATE → Modifies existing records.
+DELETE → Removes records.
+
+Algorithm
+Start.
+Create database Companies.
+Select the database using USE Companies.
+Create tables:
+Companies
+Orders
+Define Primary Key and Foreign Key constraints.
+Perform JOIN operations:
+INNER JOIN
+LEFT JOIN
+RIGHT JOIN
+FULL OUTER JOIN using UNION
+Create VIEWs:
+View1
+View2
+Insert records into View2.
+Update records in View2.
+Delete records from View2.
+Insert sample records into Companies and Orders tables.
+Display records from:
+View1
+View2
+Companies table
+Observe the output.
+Stop.
+
+Conclusion
+
+Thus, the Companies database was successfully created and various SQL operations such as JOINs, VIEW creation, INSERT, UPDATE, DELETE, and UNION were performed successfully. The experiment helped in understanding database relationships, virtual tables, and data manipulation techniques using SQL.
+
+
+1. What is DBMS?
+DBMS (Database Management System) is software used to store, organize, and manage data efficiently.
+
+2. What is SQL?
+SQL (Structured Query Language) is used to create and manipulate databases.
+
+3. What is the purpose of CREATE DATABASE?
+It is used to create a new database.
+Example:
+CREATE DATABASE Companies;
+
+4. What is a Primary Key?
+A Primary Key uniquely identifies each record in a table.
+Example:
+comp_id INT PRIMARY KEY
+
+5. What is a Foreign Key?
+A Foreign Key creates a relationship between two tables.
+Example:
+FOREIGN KEY(comp_id) REFERENCES Companies(comp_id)
+
+6. Which table stores company details?
+The Companies table stores company details.
+
+7. Which table stores order details?
+The Orders table stores order information.
+
+8. What is JOIN in SQL?
+JOIN combines records from multiple related tables.
+
+9. What is INNER JOIN?
+INNER JOIN displays only matching records from both tables.
+Example:
+INNER JOIN Orders O
+ON C.comp_id = O.comp_id;
+
+10. What is LEFT JOIN?
+LEFT JOIN displays all records from left table and matching records from right table.
+
+11. What is RIGHT JOIN?
+RIGHT JOIN displays all records from right table and matching records from left table.
+
+12. Why is UNION used in this program?
+UNION combines the results of LEFT JOIN and RIGHT JOIN.
+
+13. What is the purpose of VIEW in SQL?
+VIEW creates a virtual table based on a query.
+
+14. Which VIEW is created in this program?
+Two views are created:
+View1
+View2
+
+15. What is the advantage of VIEW?
+VIEW simplifies complex queries and improves security.
+
+16. What is the purpose of INSERT statement?
+INSERT is used to add new records into a table or view.
+Example:
+INSERT INTO View2 VALUES (101, 'TCS');
+
+17. What is UPDATE statement?
+UPDATE modifies existing records.
+Example:
+UPDATE View2
+SET name = 'Infosys'
+
+18. What is DELETE statement?
+DELETE removes records from a table or view.
+Example:
+DELETE FROM View2
+WHERE comp_id = 101;
+
+19. What does SELECT * mean?
+It selects all columns from a table or view.
+
+20. What is the purpose of aliases like C and O?
+Aliases provide short names for tables to simplify queries.
+
+21. What is referential integrity?
+It ensures valid relationships between related tables.
+
+22. What happens if duplicate Primary Key is inserted?
+The database gives an error because Primary Key values must be unique.
+
+23. Can Foreign Key contain duplicate values?
+Yes, duplicate values are allowed in Foreign Key columns.
+
+24. What is DECIMAL(10,2)?
+It stores decimal values with 10 total digits and 2 digits after decimal point.
+
+25. What is the purpose of NOT NULL constraint?
+It prevents NULL values in a column.
+
+26. Which query displays matching company and order records?
+SELECT C.name, C.cost, O.domain, O.quantity
+FROM Companies C
+INNER JOIN Orders O
+ON C.comp_id = O.comp_id;
+
+27. Which query creates View1?
+CREATE VIEW View1 AS
+SELECT C.name, O.quantity
+FROM Companies C
+JOIN Orders O
+ON C.comp_id = O.comp_id;
+
+28. Which command inserts records into Companies table?
+INSERT INTO Companies VALUES (1, 'TCS', 50000, 2023);
+
+29. What is the advantage of JOIN operations?
+JOIN operations help retrieve related data from multiple tables efficiently.
+
+30. What is normalization?
+Normalization is the process of reducing data redundancy and improving database organization.
