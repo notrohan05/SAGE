@@ -1,0 +1,260 @@
+use CompanyDB
+
+db.Employee.insertMany([
+{
+    Name: {FName: "Amit", LName: "Sharma"},
+    Company_name: "Infosys",
+    Salary: 45000,
+    Designation: "Programmer",
+    Age: 26,
+    Expertise: ["Mongodb", "Mysql", "Cassandra"],
+    DOB: "1999-05-10",
+    Email_id: "amit@gmail.com",
+    Contact: "9876543210",
+    Address: [ {PAddr: "Pune"}, {LAddr: "Mumbai"} ]
+},
+
+{
+    Name: {FName: "Riya", LName: "Patil"},
+    Company_name: "TCS",
+    Salary: 35000,
+    Designation: "Tester",
+    Age: 25,
+    Expertise: ["Java", "Mysql", "Python"],
+    DOB: "2000-08-15",
+    Email_id: "riya@gmail.com",
+    Contact: "9123456780",
+    Address: [ {PAddr: "Nashik"}, {LAddr: "Pune"} ]
+},
+
+{
+    Name: {FName: "Karan", LName: "Joshi"},
+    Company_name: "Infosys",
+    Salary: 55000,
+    Designation: "Programmer",
+    Age: 28,
+    Expertise: ["Mongodb", "Mysql", "Cassandra"],
+    DOB: "1997-03-12",
+    Email_id: "karan@gmail.com",
+    Contact: "9988776655",
+    Address: [ {PAddr: "Nagpur"}, {LAddr: "Pune" } ]
+},
+
+{
+    Name: {FName: "Sneha", LName: "Kulkarni"},
+    Company_name: "TCS",
+    Salary: 40000,
+    Designation: "Developer",
+    Age: 27,
+    Expertise: ["React", "NodeJS", "MongoDB"],
+    DOB: "1998-09-25",
+    Email_id: "sneha@gmail.com",
+    Contact: "9012345678",
+    Address: [ {PAddr: "Satara"}, {LAddr: "Mumbai"} ]
+},
+
+{
+    Name: {FName: "Rahul", LName: "Verma"},
+    Company_name: "Wipro",
+    Salary: 30000,
+    Designation: "Programmer",
+    Age: 24,
+    Expertise: ["C", "C++", "Java"],
+    DOB: "2001-01-20",
+    Email_id: "rahul@gmail.com",
+    Contact: "9090909090",
+    Address: [ {PAddr: "Delhi"}, {LAddr: "Noida"}]
+}
+])
+
+db.Employee.find( {Designation: "Programmer", Salary: { $gt: 30000 } } )
+
+db.Employee.updateOne(
+    {Designation: "Tester", Company_name: "TCS", Age: 25},
+    {$setOnInsert: {
+            Name: {FName: "Neha", LName: "Patel"},
+            Salary: 32000,
+            Expertise: ["Testing", "Manual"],
+            DOB: "2000-11-11",
+            Email_id: "neha@gmail.com",
+            Contact: "9999999999",
+            Address: [ { PAddr: "Pune" }, { LAddr: "Mumbai" } ]
+        }
+    },
+    {upsert: true}
+)
+
+db.Employee.updateMany(
+    {Company_name: "Infosys"},
+    { $inc: { Salary: 10000 } }
+)
+
+db.Employee.updateMany(
+    {Company_name: "TCS"},
+    { $inc: { Salary: -5000 } }
+)
+
+db.Employee.find( {Designation: { $ne: "Tester" } } )
+
+db.Employee.find( {Expertise: ["Mongodb", "Mysql", "Cassandra"] } )
+
+db.Employee.find().pretty()
+
+
+
+
+Aim
+
+To perform CRUD operations in MongoDB using employee documents and to study various MongoDB commands and operators.
+
+Objective
+To create and use a MongoDB database.
+To insert multiple employee documents into a collection.
+To retrieve records using conditions.
+To update single and multiple documents.
+To use MongoDB operators like $gt, $inc, $ne, and upsert.
+To display documents in formatted form.
+
+Theory
+
+MongoDB is a NoSQL database that stores data in the form of collections and documents instead of tables and rows. Documents are stored in BSON format which is similar to JSON.
+
+In this program:
+
+CompanyDB database is used.
+Employee collection stores employee details.
+Employee documents contain nested objects and arrays.
+MongoDB Commands Used
+Command	Description
+use	Selects database
+insertMany()	Inserts multiple documents
+find()	Retrieves documents
+updateOne()	Updates one document
+updateMany()	Updates multiple documents
+pretty()	Displays formatted output
+Operators Used
+Operator	Meaning
+$gt	Greater than
+$inc	Increment/Decrement value
+$ne	Not equal
+$setOnInsert	Sets values during insertion only
+upsert	Inserts document if not found
+
+Algorithm
+Start MongoDB shell.
+Select the database using use CompanyDB.
+Insert employee documents into Employee collection using insertMany().
+Retrieve employees whose designation is Programmer and salary is greater than 30000.
+Use updateOne() with upsert:true to insert a new document if matching document does not exist.
+Increase salary of Infosys employees by 10000 using $inc.
+Decrease salary of TCS employees by 5000 using $inc.
+Retrieve employees whose designation is not Tester using $ne.
+Retrieve employees having expertise in MongoDB, MySQL, and Cassandra.
+Display all documents using find().pretty().
+Stop.
+
+Conclusion
+
+Thus, the MongoDB program was executed successfully. Various MongoDB operations such as insertion, searching, updating, filtering, and displaying documents were performed using different MongoDB commands and operators.
+
+
+
+1. What is MongoDB?
+MongoDB is a NoSQL database that stores data in the form of documents.
+
+2. What is a NoSQL database?
+A NoSQL database stores data in flexible formats like documents instead of tables.
+
+3. What is a document in MongoDB?
+A document is a single record stored in JSON-like format.
+Example:
+{
+   "Name":"Amit",
+   "Salary":45000
+}
+
+4. What is a collection?
+A collection is a group of documents in MongoDB.
+
+5. What does use CompanyDB do?
+It selects or creates the CompanyDB database.
+
+6. What is insertMany()?
+It inserts multiple documents into a collection.
+
+7. What is the purpose of find()?
+find() is used to retrieve documents from a collection.
+
+8. What does $gt mean?
+$gt means greater than.
+Example:
+Salary: {$gt: 30000}
+retrieves salary greater than 30000.
+
+9. What is updateOne()?
+It updates only one matching document.
+
+10. What is updateMany()?
+It updates multiple matching documents.
+
+11. What does $inc operator do?
+$inc increases or decreases a numeric value.
+Example:
+{$inc:{Salary:10000}}
+
+12. What does $ne mean?
+$ne means not equal.
+
+13. What is upsert in MongoDB?
+upsert:true inserts a new document if no matching document is found.
+
+14. What is $setOnInsert?
+It sets values only when a new document is inserted.
+
+15. What is .pretty() used for?
+It displays documents in formatted readable style.
+
+16. Difference between MongoDB and MySQL?
+MongoDB	MySQL
+NoSQL database	Relational database
+Stores documents	Stores tables
+Flexible schema	Fixed schema
+
+17. What type of database is MongoDB?
+Document-oriented NoSQL database.
+
+18. What is BSON?
+BSON means Binary JSON used internally by MongoDB.
+
+19. What is the difference between insertOne() and insertMany()?
+insertOne()	insertMany()
+Inserts one document	Inserts multiple documents
+
+20. Why is MongoDB called schema flexible?
+Because documents in the same collection can have different fields.
+
+21. What is nested document in your program?
+Name field contains nested document:
+Name: {FName:"Amit", LName:"Sharma"}
+
+22. What is an array in MongoDB?
+A field storing multiple values.
+Example:
+Expertise:["Java","Python"]
+
+23. Which command increases Infosys employee salary?
+updateMany()
+
+with $inc.
+
+24. Which employees are selected using this query?
+{Designation:"Programmer", Salary:{$gt:30000}}
+
+Programmers having salary greater than 30000.
+
+25. What is CRUD in MongoDB?
+Operation	Meaning
+Create	Insert data
+Read	Retrieve data
+Update	Modify data
+Delete	Remove data
