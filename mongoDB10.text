@@ -1,0 +1,311 @@
+use CompanyDB
+
+db.Employee.insertMany([
+
+{
+    Name: {FName: "Amit",nLName: "Sharma"},
+    Company_name: "Infosys",
+    Salary: 45000,
+    Designation: "Programmer",
+    Age: 26,
+    Expertise: ["Mongodb", "Mysql", "Cassandra"],
+    DOB: "1999-05-10",
+    Email_id: "amit@gmail.com",
+    Contact: "9876543210",
+    Address: [{ PAddr: "Pune" }, { LAddr: "Mumbai" } ]
+},
+
+{
+    Name: {FName: "Riya", LName: "Patil"},
+    Company_name: "TCS",
+    Salary: 35000,
+    Designation: "Tester",
+    Age: 25,
+    Expertise: ["Java", "Mysql", "Python"],
+    DOB: "2000-08-15",
+    Email_id: "riya@gmail.com",
+    Contact: "9123456780",
+    Address: [{ PAddr: "Nashik" }, { LAddr: "Pune" }]
+},
+
+{
+    Name: {FName: "Karan", LName: "Joshi"},
+    Company_name: "Infosys",
+    Salary: 55000,
+    Designation: "Programmer",
+    Age: 28,
+    Expertise: ["Mongodb", "Mysql", "Cassandra"],
+    DOB: "1997-03-12",
+    Email_id: "karan@gmail.com",
+    Contact: "9988776655",
+    Address: [{ PAddr: "Nagpur" },{ LAddr: "Pune" }]
+},
+
+{
+    Name: {FName: "Sneha",LName: "Kulkarni"},
+    Company_name: "TCS",
+    Salary: 40000,
+    Designation: "Developer",
+    Age: 27,
+    Expertise: ["React", "NodeJS", "MongoDB"],
+    DOB: "1998-09-25",
+    Email_id: "sneha@gmail.com",
+    Contact: "9012345678",
+    Address: [{ PAddr: "Satara" }, { LAddr: "Mumbai" }]
+},
+
+{
+    Name: {FName: "Rahul", LName: "Verma"
+    },
+    Company_name: "Wipro",
+    Salary: 30000,
+    Designation: "Programmer",
+    Age: 24,
+    Expertise: ["C", "C++", "Java"],
+    DOB: "2001-01-20",
+    Email_id: "rahul@gmail.com",
+    Contact: "9090909090",
+    Address: [{ PAddr: "Delhi" }, { LAddr: "Noida" }]
+}
+])
+
+var map1 = function() {emit(this.Company_name, this.Salary); 
+};
+
+var reduce1 = function(key, values) { return Array.sum(values);
+};
+
+db.Employee.mapReduce( map1, reduce1, {out: "TotalSalaryPerCompany"} )
+
+db.TotalSalaryPerCompany.find()
+
+var map2 = function() { emit(this.Company_name, this.Salary); 
+};
+
+var reduce2 = function(key, values) { return Array.sum(values); };
+
+db.Employee.mapReduce( map2, reduce2,
+    {query: { Company_name: "TCS" }, out: "TCSTotalSalary"}
+)
+
+db.TCSTotalSalary.find()
+
+var map3 = function() {
+for(var i = 0; i < this.Address.length; i++) {
+if(this.Address[i].PAddr == "Pune" || this.Address[i].LAddr == "Pune") {
+emit(this.Company_name, {total: this.Salary, count: 1});
+        }
+    }
+};
+
+var reduce3 = function(key, values) {
+    var result = {total: 0, count: 0};
+
+    values.forEach(function(v) {result.total += v.total; result.count += v.count; } );
+    return result;
+};
+
+var finalize3 = function(key, reducedValue) {return reducedValue.total / reducedValue.count; };
+
+db.Employee.mapReduce(map3, reduce3, {out: "AverageSalaryPune", finalize: finalize3} )
+
+db.AverageSalaryPune.find()
+
+var map4 = function() {for(var i = 0; i < this.Address.length; i++) {
+if(this.Address[i].PAddr == "Pune" || this.Address[i].LAddr == "Pune") {
+emit("Pune", 1);
+}
+}
+};
+
+var reduce4 = function(key, values) {return Array.sum(values);};
+
+db.Employee.mapReduce( map4,reduce4,
+    {out: "PuneCount"}
+)
+
+db.PuneCount.find()
+
+var map5 = function() {
+    for(var i = 0; i < this.Address.length; i++) {
+        if((this.Address[i].PAddr == "Pune" || this.Address[i].LAddr == "Pune") &&
+            this.Age > 40) {emit("Pune_Age_Greater_40", 1); } }
+};
+
+var reduce5 = function(key, values) {
+    return Array.sum(values);
+};
+
+db.Employee.mapReduce(map5, reduce5,
+    { out: "PuneAgeGreater40"}
+)
+
+db.PuneAgeGreater40.find()
+
+
+
+
+Aim
+
+To study and perform MapReduce operations in MongoDB for calculating total salary, average salary, and counting employees based on different conditions.
+
+Objective
+To insert employee documents into MongoDB collection.
+To understand MapReduce functionality in MongoDB.
+To calculate total salary company-wise.
+To calculate total salary of TCS employees.
+To calculate average salary of employees living in Pune.
+To count employees related to Pune location.
+To count employees from Pune having age greater than 40.
+
+Theory
+
+MongoDB provides a MapReduce framework for processing large amounts of data. It works in three stages:
+
+1. Map Function
+
+The map function processes each document and emits key-value pairs.
+
+Example:
+
+emit(this.Company_name, this.Salary);
+2. Reduce Function
+
+The reduce function groups values by key and performs operations like sum, count, or average.
+
+Example:
+
+Array.sum(values)
+3. Finalize Function
+
+The finalize function performs final calculations after reduce operation.
+
+Example:
+Average calculation:
+
+total / count
+MongoDB Functions Used
+Function	Purpose
+insertMany()	Inserts multiple documents
+mapReduce()	Performs MapReduce operation
+find()	Displays documents
+emit()	Emits key-value pairs
+Array.sum()	Calculates total sum
+
+Algorithm
+Start MongoDB shell.
+Select database using use CompanyDB.
+Insert employee documents into Employee collection using insertMany().
+Create map1 and reduce1 functions to calculate total salary company-wise.
+Execute mapReduce() and store output in TotalSalaryPerCompany.
+Display results using find().
+Create map2 and reduce2 functions to calculate total salary of TCS employees.
+Execute mapReduce() with query condition for TCS employees.
+Display output using find().
+Create map3, reduce3, and finalize3 functions to calculate average salary of employees related to Pune.
+Execute mapReduce() and store output in AverageSalaryPune.
+Display results using find().
+Create map4 and reduce4 functions to count employees from Pune.
+Execute mapReduce() and store output in PuneCount.
+Display results using find().
+Create map5 and reduce5 functions to count Pune employees whose age is greater than 40.
+Execute mapReduce() and store output in PuneAgeGreater40.
+Display results using find().
+Stop.
+
+Conclusion
+
+Thus, the MongoDB MapReduce program was executed successfully. Various MapReduce operations such as calculating total salary, average salary, and employee count based on different conditions were performed using map, reduce, and finalize functions in MongoDB.
+
+
+
+
+1. What is MongoDB?
+MongoDB is a NoSQL database that stores data in document format.
+
+2. What is MapReduce in MongoDB?
+MapReduce is a technique used to process and summarize large amounts of data.
+
+3. What are the phases of MapReduce?
+Phase	Work
+Map	Emits key-value pairs
+Reduce	Combines values
+Finalize	Performs final calculation
+
+4. What does emit() do?
+emit() sends key-value pairs from map function to reduce function.
+Example:
+emit(this.Company_name, this.Salary)
+
+5. What is the purpose of mapReduce()?
+It performs aggregation and data processing operations.
+
+6. What is the role of map function?
+The map function reads each document and generates key-value pairs.
+
+7. What is the role of reduce function?
+The reduce function combines values having the same key.
+
+8. What does Array.sum(values) do?
+It calculates the sum of values.
+
+9. What is the purpose of finalize function?
+It performs final calculations after reduce phase.
+Example:
+Average calculation.
+
+10. Which query calculates total salary company-wise?
+db.Employee.mapReduce(map1, reduce1,
+{out:"TotalSalaryPerCompany"})
+
+11. What is stored in TotalSalaryPerCompany?
+Total salary of employees for each company.
+
+12. What is the purpose of query option in mapReduce?
+query:{Company_name:"TCS"}
+It filters only TCS documents before processing.
+
+13. Which function calculates TCS total salary?
+map2 and reduce2.
+
+14. What is the purpose of out option?
+It stores MapReduce result into a collection.
+
+15. What does this condition check?
+this.Address[i].PAddr == "Pune"
+Checks whether permanent address is Pune.
+
+16. Why is loop used in map3?
+Because Address is an array and each address element must be checked.
+
+17. What is calculated in AverageSalaryPune?
+Average salary of employees related to Pune.
+
+18. How is average salary calculated?
+total / count
+using finalize function.
+
+19. What is stored in PuneCount?
+Count of employees associated with Pune.
+
+20. Which operator is used to count employees?
+emit("Pune",1) with Array.sum(values).
+
+21. What is calculated in PuneAgeGreater40?
+Count of employees from Pune whose age is greater than 40.
+
+22. Why does PuneAgeGreater40 return empty result in this program?
+Because no employee has age greater than 40.
+
+23. What is BSON in MongoDB?
+BSON stands for Binary JSON.
+
+24. Difference between SQL and MongoDB?
+SQL	MongoDB
+Tables	Collections
+Rows	Documents
+Columns	Fields
+
+25. What is the advantage of MongoDB?
+MongoDB provides flexible schema and handles large data efficiently.
+
